@@ -15,4 +15,10 @@ router.post(
   controllerWrapper(authController.logout)
 );
 
+router.get(
+  "/current",
+  userAuthMiddleware,
+  controllerWrapper(authController.getCurrentUser)
+);
+
 module.exports = router;
