@@ -5,10 +5,6 @@ const addNoticeSchema = Joi.object({
     .valid("your pet", "sell", "lost/found", "in good hands")
     .required(),
   titleOfAd: Joi.string(),
-
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-  favorite: Joi.boolean().default(false),
 });
 
 const schemas = {
