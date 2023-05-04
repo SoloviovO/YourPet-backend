@@ -1,9 +1,5 @@
-const {
-  addContactSchema,
-  addContactStatusUpdateSchema,
-} = require("./add-contact.schema");
+const { addUserSchema } = require("./add-user.schema");
 
 module.exports = {
-  addContactSchema,
-  addContactStatusUpdateSchema,
+  addUserSchema,
 };
