@@ -33,7 +33,7 @@ const signUp = async (req, res, next) => {
   const accessJWT = createJWT({ userId: String(newUser._id), sessionKey });
 
   res.status(201).json({
-    user: { email: newUser.email, subscription: newUser.subscription },
+    user: { email: newUser.email },
   });
 };
 
