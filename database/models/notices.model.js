@@ -38,7 +38,7 @@ const noticesSchema = new Schema(
     },
     photoURL: {
       type: String,
-      required: true,
+      //   required: true,
     },
     owner: {
       type: Schema.Types.ObjectId,
