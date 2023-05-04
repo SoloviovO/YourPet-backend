@@ -5,10 +5,17 @@ const addNoticeSchema = Joi.object({
     .valid("your pet", "sell", "lost/found", "in good hands")
     .required(),
   titleOfAd: Joi.string(),
+  dateOfBirth: Joi.string(),
+  namePet: Joi.string(),
+  breed: Joi.string(),
+  sex: Joi.string().valid("male", "female").required(),
+  location: Joi.string().required(),
+  price: Joi.string(),
+  comments: Joi.string(),
 });
 
-const schemas = {
+const noticeSchemas = {
   addNoticeSchema,
 };
 
-module.exports = { schemas };
+module.exports = { noticeSchemas };
