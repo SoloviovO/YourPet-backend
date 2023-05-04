@@ -17,12 +17,12 @@ const signUp = async (req, res, next) => {
   }
 
   const passwordHash = await createHash(password);
-  const avatarURL = gravatar.url(email);
+  const image = gravatar.url(email);
 
   const newUser = await UserModel.create({
     email,
     passwordHash,
-    avatarURL,
+    image,
   }).catch((error) => {
     throw createHttpException(409, "Email in use");
   });
@@ -33,7 +33,15 @@ const signUp = async (req, res, next) => {
   const accessJWT = createJWT({ userId: String(newUser._id), sessionKey });
 
   res.status(201).json({
-    user: { email: newUser.email },
+    user: {
+      id: newUser._id,
+      email: newUser.email,
+      name: newUser.name,
+      birthday: newUser.birthday,
+      phone: newUser.phone,
+      city: newUser.city,
+      image: newUser.image,
+    },
   });
 };
 
