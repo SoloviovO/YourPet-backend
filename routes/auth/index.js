@@ -22,6 +22,12 @@ router.get(
 );
 
 router.patch(
+  "/update",
+  userAuthMiddleware,
+  controllerWrapper(authController.updateUserInfo)
+);
+
+router.patch(
   "/avatars",
   userAuthMiddleware,
   upload.single("avatar"),
