@@ -33,7 +33,15 @@ const signIn = async (req, res, next) => {
 
   res.json({
     token: accessJWT,
-    user: { email: user.email },
+    user: {
+      id: user._id,
+      email: user.email,
+      name: user.name,
+      birthday: user.birthday,
+      phone: user.phone,
+      city: user.city,
+      image: user.image,
+    },
   });
 };
 
