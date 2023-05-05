@@ -1,6 +1,6 @@
-const NoticesModel = require("../../database/models/notices.model");
+const { NoticesModel } = require("../../database/models/notices.model");
 
-const { getCategorySchema, addNoticeSchema } =
+const { getCategorySchema, addNoticeSchema, addNoticeCategorySchema } =
   require("../../schemas/notice.schema").noticeSchemas;
 const { createHttpException } = require("../../services");
 const { upload } = require("../../middlewares");
@@ -23,6 +23,7 @@ const getCategory = async (req, res) => {
 };
 
 const addNotice = async (req, res) => {
+  const user = req.user;
   const {
     category,
     title,
@@ -35,7 +36,7 @@ const addNotice = async (req, res) => {
     comments,
   } = req.body;
 
-  const { error } = addNoticeSchema.validate({
+  const { error } = addNoticeCategorySchema.validate({
     category,
     title,
     dateOfBirth,
@@ -47,16 +48,10 @@ const addNotice = async (req, res) => {
     comments,
   });
   if (error) {
-    const message = error.details.map((detail) => detail.message).join(", ");
-    throw createHttpException(400, message);
+    const invalidField = error.details[0].path[0];
+    throw createHttpException(400, `missing required ${invalidField} field`);
   }
-
-  // якщо є завантажене зображення - додати його посилання до запиту
-  if (req.file) {
-    req.body.image = req.file.filename;
-  }
-
-  const notice = new NoticesModel({
+  const newNotice = await NoticesModel.create({
     category,
     title,
     dateOfBirth,
@@ -66,16 +61,14 @@ const addNotice = async (req, res) => {
     location,
     price,
     comments,
-    owner: req.user._id,
-    image: req.body.image || null,
+    owner: user._id,
   });
 
-  const savedNotice = await notice.save();
-
-  res.status(201).json({ notice: savedNotice });
+  res.status(201).json(newNotice);
 };
 
 module.exports = {
   getCategory,
-  addNotice: [upload.single("image"), addNotice],
+  // addNotice: [upload.single("image"), addNotice],
+  addNotice,
 };
