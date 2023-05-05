@@ -1,3 +1,4 @@
 const { getNoticesList } = require("./noticesList");
+const { getCategory, addNotice } = require("./notices-category");
 
-module.exports = { getNoticesList };
+module.exports = { getNoticesList, getCategory, addNotice };
