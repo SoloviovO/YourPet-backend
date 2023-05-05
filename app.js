@@ -18,7 +18,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
-
+console.log("test")
 app.use("/api/users", userRouter);
 app.use("/api/notices", noticeRouter);
 
