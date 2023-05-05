@@ -8,6 +8,8 @@ const swaggerDocument = require('./swagger.json');
 
 const userRouter = require("./routes/auth");
 const noticeRouter = require("./routes/notice");
+const friendsRouter = require("./routes/friends");
+const newsRouter = require("./routes/news");
 const { errorHandlingMiddleware } = require("./middlewares");
 
 const app = express();
@@ -21,6 +23,8 @@ app.use(express.static("public"));
 console.log("test")
 app.use("/api/users", userRouter);
 app.use("/api/notices", noticeRouter);
+app.use("/api/friends", friendsRouter);
+app.use("/api/news", newsRouter);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
