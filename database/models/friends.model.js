@@ -4,7 +4,7 @@ const friendsSchema = mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, "Set title for new"],
+      required: [true, "Set title"],
     },
     url: {
       type: String,
