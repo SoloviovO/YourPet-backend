@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const addNoticeSchema = Joi.object({
   category: Joi.string()
-    .valid("your pet", "sell", "lost/found", "in good hands")
+    .valid("sell", "lost/found", "in good hands")
     .required(),
   titleOfAd: Joi.string(),
   dateOfBirth: Joi.string(),
@@ -14,8 +14,13 @@ const addNoticeSchema = Joi.object({
   comments: Joi.string(),
 });
 
+const getCategorySchema = Joi.object({
+  category: Joi.string().valid("sell", "lost/found", "in good hands"),
+});
+
 const noticeSchemas = {
   addNoticeSchema,
+  getCategorySchema,
 };
 
 module.exports = { noticeSchemas };
