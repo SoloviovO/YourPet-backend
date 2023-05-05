@@ -1,6 +1,6 @@
 const express = require("express");
 
-const noticesController = require("../../controllers/notices/notices-category");
+const noticesController = require("../../controllers/notices");
 
 // const validateBody = require("../../middlewares/validateBody");
 
@@ -11,6 +11,7 @@ const { controllerWrapper } = require("../../services");
 const router = express.Router();
 
 router.get("/", noticesController.getCategory);
+router.get("/find", controllerWrapper(noticesController.getNoticesList));
 
 router.post(
   "/",

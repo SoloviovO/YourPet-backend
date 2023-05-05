@@ -9,7 +9,7 @@ const noticesSchema = new Schema(
       enum: ["your pet", "sell", "lost/found", "in good hands"],
       required: true,
     },
-    titleOfAd: {
+    title: {
       type: String,
     },
     dateOfBirth: {
