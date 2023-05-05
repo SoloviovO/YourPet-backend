@@ -36,7 +36,12 @@ const userSchema = mongoose.Schema(
       required: true,
     },
     favorite: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Notices" }],
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "notices" }],
+    },
+    pets: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "pets",
+      default: [],
     },
     sessionKey: {
       type: String,

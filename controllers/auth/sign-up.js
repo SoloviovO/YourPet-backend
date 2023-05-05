@@ -15,7 +15,10 @@ const signUp = async (req, res, next) => {
   if (error) {
     throw createHttpException(400, error.message);
   }
-
+  const user = await UserModel.findOne({ email });
+  if (user) {
+    throw createHttpException(409, "Email in use");
+  }
   const passwordHash = await createHash(password);
   const image = gravatar.url(email);
 
@@ -23,8 +26,6 @@ const signUp = async (req, res, next) => {
     email,
     passwordHash,
     image,
-  }).catch((error) => {
-    throw createHttpException(409, "Email in use");
   });
 
   const sessionKey = crypto.randomUUID();
@@ -34,7 +35,6 @@ const signUp = async (req, res, next) => {
 
   res.status(201).json({
     user: {
-      id: newUser._id,
       email: newUser.email,
       name: newUser.name,
       birthday: newUser.birthday,
