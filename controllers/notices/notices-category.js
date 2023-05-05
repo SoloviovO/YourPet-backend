@@ -1,5 +1,4 @@
-const NoticesModel = require("../../database/models/notices.model");
-
+const { NoticesModel } = require("../../database/models");
 const { noticeSchemas } = require("../../schemas/notice.schema");
 
 const getCategory = async (req, res) => {
