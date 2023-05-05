@@ -6,7 +6,7 @@ const noticesSchema = new Schema(
   {
     category: {
       type: String,
-      enum: ["your pet", "sell", "lost/found", "in good hands"],
+      enum: ["sell", "lost/found", "in good hands"],
       required: true,
     },
     title: {
@@ -53,4 +53,4 @@ const noticesSchema = new Schema(
 
 const NoticesModel = model("notices", noticesSchema);
 
-module.exports = NoticesModel;
+module.exports = { NoticesModel };
