@@ -15,16 +15,17 @@ const signUp = async (req, res, next) => {
   if (error) {
     throw createHttpException(400, error.message);
   }
-
+  const user = await UserModel.findOne({ email });
+  if (user) {
+    throw createHttpException(409, "Email in use");
+  }
   const passwordHash = await createHash(password);
-  const avatarURL = gravatar.url(email);
+  const image = gravatar.url(email);
 
   const newUser = await UserModel.create({
     email,
     passwordHash,
-    avatarURL,
-  }).catch((error) => {
-    throw createHttpException(409, "Email in use");
+    image,
   });
 
   const sessionKey = crypto.randomUUID();
@@ -33,7 +34,14 @@ const signUp = async (req, res, next) => {
   const accessJWT = createJWT({ userId: String(newUser._id), sessionKey });
 
   res.status(201).json({
-    user: { email: newUser.email },
+    user: {
+      email: newUser.email,
+      name: newUser.name,
+      birthday: newUser.birthday,
+      phone: newUser.phone,
+      city: newUser.city,
+      image: newUser.image,
+    },
   });
 };
 
