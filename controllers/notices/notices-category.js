@@ -3,28 +3,7 @@ const NoticesModel = require("../../database/models/notices.model");
 const { getCategorySchema, addNoticeSchema } =
   require("../../schemas/notice.schema").noticeSchemas;
 const { createHttpException } = require("../../services");
-
-// const { noticeSchemas } = require("../../schemas");
-
-// const getCategory = async (req, res) => {
-//   const { category } = req.query;
-
-//   const allowedCategories = ["sell", "lost/found", "in good hands"];
-
-//   if (category && !allowedCategories.includes(category)) {
-//     return res
-//       .status(400)
-//       .json({
-//         error:
-//           "Invalid category, please select one of: [ sell, lost/found, in good hands]",
-//       });
-//   }
-
-//   const notices = await NoticesModel.find({
-//     category: category ? category : "sell",
-//   });
-//   res.json(notices);
-// };
+const { upload } = require("../../middlewares");
 
 const getCategory = async (req, res) => {
   const { category } = req.query;
@@ -42,20 +21,6 @@ const getCategory = async (req, res) => {
   });
   res.json(notices);
 };
-
-// const getCategory = async (req, res) => {
-//   const { category } = req.query;
-
-//   const { error } = getCategorySchema.validate({ category });
-//   if (error) {
-//     throw createHttpException(400, error.message);
-//   }
-
-//   const notices = await NoticesModel.find({
-//     category: category ? category : "sell",
-//   });
-//   res.json(notices);
-// };
 
 const addNotice = async (req, res) => {
   const {
@@ -86,6 +51,11 @@ const addNotice = async (req, res) => {
     throw createHttpException(400, message);
   }
 
+  // якщо є завантажене зображення - додати його посилання до запиту
+  if (req.file) {
+    req.body.image = req.file.filename;
+  }
+
   const notice = new NoticesModel({
     category,
     title,
@@ -97,6 +67,7 @@ const addNotice = async (req, res) => {
     price,
     comments,
     owner: req.user._id,
+    image: req.body.image || null,
   });
 
   const savedNotice = await notice.save();
@@ -106,5 +77,5 @@ const addNotice = async (req, res) => {
 
 module.exports = {
   getCategory,
-  addNotice,
+  addNotice: [upload.single("image"), addNotice],
 };

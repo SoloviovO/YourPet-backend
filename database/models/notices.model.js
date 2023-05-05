@@ -53,4 +53,4 @@ const noticesSchema = new Schema(
 
 const NoticesModel = model("notices", noticesSchema);
 
-module.exports = NoticesModel;
+module.exports = { NoticesModel };

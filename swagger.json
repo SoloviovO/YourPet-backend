@@ -1,0 +1,135 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.1",
+    "title": "Swagger YourPet",
+    "description": "Showing off swagger-ui-express"
+  },
+  "consumes": ["appliation/json"],
+  "produces": ["application/json"],
+  "servers": [{ "url": "https://yourpet-backend.onrender.com/api" }],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Notices",
+      "description": "Notices endpoints"
+    }
+  ],
+  "paths": {
+    "/users/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Registration",
+        "parameters": [],
+    
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email or password is wrong",
+            "content": {}
+          },
+          "409": {
+            "description": "Email in use",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "name": {
+              "type": "string"
+            },
+            "birthday": {
+              "type": "string",
+              "format": "data"
+            },
+            "phone": {
+              "type": "string",
+              "format": "phone"
+            },
+            "city": {
+              "type": "string"
+            },
+            "image": {
+              "type": "string",
+              "format": "binary"
+            }
+          }
+        },
+        "example": [
+          {
+            "id": "6453bbe29b2611f1d181cb07",
+            "email": "1@gmail.com",
+            "name": "Name",
+            "birthday": "2001-03-20",
+            "phone": "+380952351628",
+            "city": "Kyiv",
+            "image": "//www.gravatar.com/avatar/91d8e7d123dbd461a0662e6d76d58c0f"
+          }
+        ]
+      }
+    },
+
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
