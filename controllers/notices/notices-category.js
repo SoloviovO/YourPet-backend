@@ -4,6 +4,9 @@ const { getCategorySchema, addNoticeSchema, addNoticeCategorySchema } =
   require("../../schemas/notice.schema").noticeSchemas;
 const { createHttpException } = require("../../services");
 const { upload } = require("../../middlewares");
+// const { NoticesModel } = require("../../database/models");
+const { noticeSchemas } = require("../../schemas/notice.schema");
+const gravatar = require("gravatar");
 
 const getCategory = async (req, res) => {
   const { category } = req.query;
@@ -23,6 +26,7 @@ const getCategory = async (req, res) => {
 };
 
 const addNotice = async (req, res) => {
+  // console.log(req.body);
   const user = req.user;
   const {
     category,
@@ -34,7 +38,9 @@ const addNotice = async (req, res) => {
     location,
     price,
     comments,
+    // image,
   } = req.body;
+  // console.log(req.files);
 
   const { error } = addNoticeCategorySchema.validate({
     category,
@@ -46,11 +52,13 @@ const addNotice = async (req, res) => {
     location,
     price,
     comments,
+    // image,
   });
   if (error) {
     const invalidField = error.details[0].path[0];
     throw createHttpException(400, `missing required ${invalidField} field`);
   }
+  const photoURL = gravatar.url();
   const newNotice = await NoticesModel.create({
     category,
     title,
@@ -61,60 +69,13 @@ const addNotice = async (req, res) => {
     location,
     price,
     comments,
+    photoURL,
+    // image,
     owner: user._id,
   });
 
   res.status(201).json(newNotice);
 };
-
-// const addNotice = async (req, res, next) => {
-//   try {
-//     const user = req.user;
-//     const {
-//       category,
-//       title,
-//       dateOfBirth,
-//       namePet,
-//       breed,
-//       sex,
-//       location,
-//       price,
-//       comments,
-//     } = req.body;
-
-//     const { error } = addNoticeCategorySchema.validate({
-//       category,
-//       title,
-//       dateOfBirth,
-//       namePet,
-//       breed,
-//       sex,
-//       location,
-//       price,
-//       comments,
-//     });
-//     if (error) {
-//       const invalidField = error.details[0].path[0];
-//       throw createHttpException(400, `missing required ${invalidField} field`);
-//     }
-//     const newNotice = await NoticesModel.create({
-//       category,
-//       title,
-//       dateOfBirth,
-//       namePet,
-//       breed,
-//       sex,
-//       location,
-//       price,
-//       comments,
-//       owner: user._id,
-//     });
-
-//     res.status(201).json(newNotice);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 module.exports = {
   getCategory,

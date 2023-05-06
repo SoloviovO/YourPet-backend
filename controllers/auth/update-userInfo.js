@@ -17,7 +17,7 @@ const updateUserInfo = async (req, res, next) => {
     city,
   });
   if (error) {
-    throw createHttpException(400, "missing field subscription");
+    throw createHttpException(400, error.message);
   }
 
   const result = await UserModel.findByIdAndUpdate(

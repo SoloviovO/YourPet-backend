@@ -26,6 +26,10 @@ const addNoticeCategorySchema = Joi.object({
   location: Joi.string().required(),
   price: Joi.string(),
   comments: Joi.string(),
+  // image: Joi.object({
+  //   data: Joi.binary().required(),
+  //   contentType: Joi.string().required(),
+  // }).required(),
 });
 
 const getCategorySchema = Joi.object({
