@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "title": "Swagger YourPet",
     "description": "Showing off swagger-ui-express"
   },
@@ -10,21 +10,34 @@
   "servers": [{ "url": "https://yourpet-backend.onrender.com/api" }],
   "tags": [
     {
-      "name": "Auth",
+      "name": "Users",
       "description": "Authorization endpoints"
     },
     {
       "name": "Notices",
       "description": "Notices endpoints"
+    },
+    {
+      "name": "Friends",
+      "description": "Friend endpoints"
+    },
+    {
+      "name": "News",
+      "description": "News endpoints"
+    },
+    {
+      "name": "Pets",
+      "description": "Pets endpoints"
     }
   ],
+
   "paths": {
     "/users/register": {
       "post": {
-        "tags": ["Auth"],
+        "tags": ["Users"],
         "summary": "Registration",
         "parameters": [],
-    
+
         "requestBody": {
           "description": "Registration's object",
           "required": true,
@@ -48,12 +61,77 @@
             }
           },
           "400": {
-            "description": "Email or password is wrong",
+            "description": "Validation error",
             "content": {}
           },
           "409": {
             "description": "Email in use",
             "content": {}
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Login",
+        "parameters": [],
+
+        "requestBody": {
+          "description": "Login's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {}
+          },
+          "404": {
+            "description": "Email or password is wrong",
+            "content": {}
+          },
+          "401": {
+            "description": "Email or password is wrong",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Logout",
+        "parameters": [],
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogoutRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Deleted successfully"
           }
         }
       }
@@ -68,13 +146,14 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "User's email",
             "format": "email"
           },
           "password": {
             "type": "string",
-            "description": "User's password",
-            "example": "qwerty123"
+            "minLength": "6",
+            "maxLength": "16",
+            "pattern": " ^ ^ (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,16}) $",
+            "example": "qWerty123"
           }
         }
       },
@@ -121,15 +200,89 @@
             "image": "//www.gravatar.com/avatar/91d8e7d123dbd461a0662e6d76d58c0f"
           }
         ]
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "minLength": "6",
+            "maxLength": "16",
+            "pattern": " ^ (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,16}) $",
+            "example": "qWerty123"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string"
+            },
+            "id": {
+              "type": "integer"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "name": {
+              "type": "string"
+            },
+            "birthday": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string",
+              "format": "phone"
+            },
+            "city": {
+              "type": "string"
+            },
+            "image": {
+              "type": "string",
+              "format": "binary"
+            }
+          }
+        },
+        "example": [
+          {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDRiNmQ5NzU2YjljMzc2OTg0YjE0MDgiLCJzZXNzaW9uS2V5IjoiNGEwZTQ1M2EtN2NiMS00ZTgwLTllMTgtYmU0ZTQ3YzJhYjI1IiwiaWF0IjoxNjgyNjczOTI1LCJleHAiOjE2ODI2NzU3MjV9.nd49ejNfSriW6S3dSDAPfUpscukVtgQvN1fsd9y2uFc",
+            "id": "6453bbe29b2611f1d181cb07",
+            "email": "1@gmail.com",
+            "name": "Name",
+            "birthday": "2001-03-20",
+            "phone": "+380952351628",
+            "city": "Kyiv",
+            "image": "//www.gravatar.com/avatar/91d8e7d123dbd461a0662e6d76d58c0f"
+          }
+        ]
       }
     },
-
-    "securitySchemes": {
-      "Bearer": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+    "LogoutRequest": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "6453bbe29b2611f1d181cb07"
+        }
       }
+    }
+  },
+
+  "securitySchemes": {
+    "Bearer": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
     }
   }
 }
