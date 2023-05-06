@@ -11,7 +11,7 @@ const userAuthMiddleware = async (req, res, next) => {
       throw createHttpException(401, unauthorizedMessage);
     }
 
-    const [bearer, token] = authorizationHeader.split(" ");
+    const [bearer, token] = authorizationHeader?.split(" ");
     if (bearer !== "Bearer" || !token) {
       throw createHttpException(401, unauthorizedMessage);
     }
