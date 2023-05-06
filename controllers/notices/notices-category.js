@@ -67,6 +67,55 @@ const addNotice = async (req, res) => {
   res.status(201).json(newNotice);
 };
 
+// const addNotice = async (req, res, next) => {
+//   try {
+//     const user = req.user;
+//     const {
+//       category,
+//       title,
+//       dateOfBirth,
+//       namePet,
+//       breed,
+//       sex,
+//       location,
+//       price,
+//       comments,
+//     } = req.body;
+
+//     const { error } = addNoticeCategorySchema.validate({
+//       category,
+//       title,
+//       dateOfBirth,
+//       namePet,
+//       breed,
+//       sex,
+//       location,
+//       price,
+//       comments,
+//     });
+//     if (error) {
+//       const invalidField = error.details[0].path[0];
+//       throw createHttpException(400, `missing required ${invalidField} field`);
+//     }
+//     const newNotice = await NoticesModel.create({
+//       category,
+//       title,
+//       dateOfBirth,
+//       namePet,
+//       breed,
+//       sex,
+//       location,
+//       price,
+//       comments,
+//       owner: user._id,
+//     });
+
+//     res.status(201).json(newNotice);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 module.exports = {
   getCategory,
   // addNotice: [upload.single("image"), addNotice],

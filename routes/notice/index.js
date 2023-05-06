@@ -14,7 +14,7 @@ router.get("/find", controllerWrapper(noticesController.getNoticesList));
 router.get("/:id", controllerWrapper(noticesController.getOneNotice));
 router.post(
   "/",
-  // upload.single("image"),
+  upload.single("image"),
   userAuthMiddleware,
   controllerWrapper(noticesController.addNotice)
 );
