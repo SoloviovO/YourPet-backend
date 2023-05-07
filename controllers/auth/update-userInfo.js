@@ -1,9 +1,6 @@
 const { UserModel } = require("../../database/models");
-const {
-  addUserUpdateSubscriptionSchema,
-  updateUserInfoSchema,
-} = require("../../schemas");
-const { createHttpException, mapContactOutput } = require("../../services");
+const { updateUserInfoSchema } = require("../../schemas");
+const { createHttpException } = require("../../services");
 
 const updateUserInfo = async (req, res, next) => {
   const user = req.user;

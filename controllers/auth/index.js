@@ -3,6 +3,7 @@ const { deleteFavoriteNitice } = require("./delete-from-favorite");
 const { getCurrentUser } = require("./get-currentUser");
 const { getFavoriteNotices } = require("./get-favorite");
 const { logout } = require("./logout");
+const { refresh } = require("./refresh");
 const { signIn } = require("./sign-in");
 const { signUp } = require("./sign-up");
 const { updateAvatar } = require("./update-avatar");
@@ -20,4 +21,5 @@ module.exports = {
   addNoticeToFavirite,
   deleteFavoriteNitice,
   getFavoriteNotices,
+  refresh,
 };

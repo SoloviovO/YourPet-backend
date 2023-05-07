@@ -13,6 +13,8 @@ router.post("/register", controllerWrapper(authController.signUp));
 
 router.post("/login", controllerWrapper(authController.signIn));
 
+router.post("/refresh", controllerWrapper(authController.refresh));
+
 router.post(
   "/logout",
   userAuthMiddleware,
