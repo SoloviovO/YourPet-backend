@@ -36,7 +36,8 @@ const userSchema = mongoose.Schema(
       required: true,
     },
     favorite: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "notices" }],
+      type: Array,
+      default: [],
     },
     pets: {
       type: [mongoose.Schema.Types.ObjectId],
@@ -47,6 +48,9 @@ const userSchema = mongoose.Schema(
       type: String,
       default: null,
       trim: true,
+    },
+    refreshToken: {
+      type: String,
     },
     token: {
       type: String,
