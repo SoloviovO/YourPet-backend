@@ -33,21 +33,8 @@ const getCategory = async (req, res) => {
 };
 
 const addNotice = async (req, res) => {
-  // console.log(req.body);
   const user = req.user;
-  // const { path: tempUpload, originalname } = req.file;
 
-  // const filename = `${user._id}_${originalname}`;
-  // const resultUpload = path.join(avatarsDir, filename);
-  // console.log(resultUpload);
-  // await fs.rename(tempUpload, resultUpload);
-  // const imageUrl = path.join("avatars", filename);
-  // console.log(imageUrl);
-  // const smallAvatarURL = path.join("public", "avatars", filename);
-  // Jimp.read(smallAvatarURL, (error, filename) => {
-  //   if (error) throw error;
-  //   filename.cover(250, 250).quality(60).write(smallAvatarURL);
-  // });
   const {
     category,
     title,
