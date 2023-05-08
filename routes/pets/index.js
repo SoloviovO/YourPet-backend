@@ -11,6 +11,7 @@ const router = express.Router();
 router.post(
   "/",
   userAuthMiddleware,
+
   controllerWrapper(petsController.addUserPet)
 );
 
