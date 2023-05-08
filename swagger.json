@@ -2,6 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "version": "1.0.4",
+
     "title": "Swagger YourPet",
     "description": "Showing off swagger-ui-express"
   },
@@ -155,6 +156,7 @@
     "/auth/logout": {
       "post": {
         "tags": ["Auth"],
+
         "summary": "Logout",
         "parameters": [],
 
@@ -374,6 +376,7 @@
             },
             "refreshToken": {
               "type": "string"
+
             }
        
           }
@@ -382,7 +385,7 @@
           {
             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDRiNmQ5NzU2YjljMzc2OTg0YjE0MDgiLCJzZXNzaW9uS2V5IjoiNGEwZTQ1M2EtN2NiMS00ZTgwLTllMTgtYmU0ZTQ3YzJhYjI1IiwiaWF0IjoxNjgyNjczOTI1LCJleHAiOjE2ODI2NzU3MjV9.nd49ejNfSriW6S3dSDAPfUpscukVtgQvN1fsd9y2uFc",
             "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDU2MjRmYmQxYzBlYmM2NmNjZGIwMGEiLCJzZXNzaW9uS2V5IjoiYzFjMjMzNTYtNWI3Yy00MjFkLWFmNzAtYjM5YjE2OGIxNDk3IiwiaWF0IjoxNjgzNDExMjg0LCJleHAiOjE4NjM0MTEyODR9.0QXD5iPujHoow3aExltvoAO208s5Z5h56pmg8Oj-mno"
-      
+    
           }
         ]
       },

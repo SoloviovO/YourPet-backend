@@ -42,8 +42,15 @@ const userSchema = mongoose.Schema(
     pets: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "pets",
-      default: [],
+      // default: [],
     },
+    notices: [
+      {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "notices",
+        // default: [],
+      },
+    ],
     sessionKey: {
       type: String,
       default: null,
