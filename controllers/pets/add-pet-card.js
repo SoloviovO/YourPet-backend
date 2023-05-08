@@ -11,6 +11,7 @@ const addUserPet = async (req, res) => {
     throw createHttpException(400, "Name or breed required");
   }
   const result = await cloudinary.uploader.upload(req.file.path);
+  console.log(Boolean(result));
 
   const newPet = await PetsModel.create({
     name,
