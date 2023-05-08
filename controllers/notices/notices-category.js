@@ -94,7 +94,6 @@ const addNotice = async (req, res) => {
     location,
     price,
     comments,
-    // photoURL: imageUrl,
     photoURL: result.secure_url,
     owner: user._id,
   });
