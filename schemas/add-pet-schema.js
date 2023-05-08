@@ -8,4 +8,4 @@ const addPetSchema = Joi.object({
   comments: Joi.string(),
 });
 
-module.exports = { addPetSchema };
+module.exports = addPetSchema;
