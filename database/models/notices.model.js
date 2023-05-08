@@ -32,6 +32,7 @@ const noticesSchema = new Schema(
     },
     price: {
       type: String,
+      // default: "",
     },
     comments: {
       type: String,
@@ -46,7 +47,7 @@ const noticesSchema = new Schema(
       required: true,
     },
   },
-  { versionKey: false, timestamps: true }
+  { versionKey: false, timestamps: false }
 );
 
 // userSchema.post("save", handleMongooseError);
