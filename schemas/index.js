@@ -1,5 +1,6 @@
 const { addUserSchema } = require("./add-user.schema");
 const noticeSchemas = require("./notice.schema");
+const addPetSchema = require("./add-pet-schema");
 const {
   updateUserInfo,
   updateUserInfoSchema,
@@ -9,4 +10,5 @@ module.exports = {
   addUserSchema,
   noticeSchemas,
   updateUserInfoSchema,
+  addPetSchema,
 };
