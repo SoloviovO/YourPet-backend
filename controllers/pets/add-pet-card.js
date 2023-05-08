@@ -4,24 +4,27 @@ const { createHttpException } = require("../../services");
 const cloudinary = require("cloudinary").v2;
 
 const addUserPet = async (req, res) => {
-  const { name, dateOfBirth, breed, comments } = req.body;
+  const { name, birthday, breed, comments } = req.body;
   const { _id: owner } = req.user;
-  const { error } = addPetSchema.validate({ name, breed });
+
+  const { error } = addPetSchema.validate({ name, breed, birthday });
   if (error) {
-    throw createHttpException(400, "Name or breed required");
+    const invalidField = error.details[0].path[0];
+    throw createHttpException(400, `missing required ${invalidField} field`);
   }
+
   const result = await cloudinary.uploader.upload(req.file.path);
 
   const newPet = await PetsModel.create({
     name,
-    dateOfBirth,
+    birthday,
     breed,
-    photoURL: result.secure_url,
+    image: result.secure_url,
     comments,
     owner,
   });
 
-  res.json(newPet);
+  res.status(201).json(newPet);
 };
 
 module.exports = { addUserPet };

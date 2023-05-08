@@ -23,7 +23,7 @@ const addNoticeToFavirite = async (req, res, next) => {
 
   await user.save();
 
-  res.json({ user });
+  res.status(201).json({ user });
 
   // Version for add only id in array favorites
 

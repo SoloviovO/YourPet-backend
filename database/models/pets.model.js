@@ -4,21 +4,32 @@ const { Schema, model } = require("mongoose");
 
 const petsSchema = new Schema(
   {
-    dateOfBirth: {
+    name: {
       type: String,
+      minLength: 2,
+      maxLength: 16,
+      required: true,
     },
-    namePet: {
+    birthday: {
       type: String,
+      default: "00.00.0000",
+      required: true,
     },
+
     breed: {
       type: String,
+      minLength: 2,
+      maxLength: 16,
+      required: true,
     },
     comments: {
       type: String,
+      minLength: 8,
+      maxLength: 120,
     },
-    photoURL: {
+    image: {
       type: String,
-      // required: true,
+      required: true,
     },
     owner: {
       type: Schema.Types.ObjectId,
@@ -26,11 +37,14 @@ const petsSchema = new Schema(
       required: true,
     },
   },
-  { versionKey: false, timestamps: false }
+  {
+    versionKey: false,
+    timestamps: false,
+  }
 );
 
 // userSchema.post("save", handleMongooseError);
 
-const PetsModel = model("pets", petsSchema);
+const PetsModel = model("pet", petsSchema);
 
 module.exports = { PetsModel };
