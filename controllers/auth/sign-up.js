@@ -29,7 +29,7 @@ const signUp = async (req, res, next) => {
   });
 
   const sessionKey = crypto.randomUUID();
-  await UserModel.findByIdAndUpdate(newUser.id, { sessionKey });
+  await UserModel.findByIdAndUpdate(newUser._id, { sessionKey });
 
   const accessJWT = createJWT({ userId: String(newUser._id), sessionKey });
 

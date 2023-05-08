@@ -1,6 +1,11 @@
 const { UserModel } = require("../../database/models/user.model");
 const crypto = require("crypto");
-const { createHttpException, checkHash, createJWT } = require("../../services");
+const {
+  createHttpException,
+  checkHash,
+  createJWT,
+  createRefresh,
+} = require("../../services");
 const { addUserSchema } = require("../../schemas");
 
 const signIn = async (req, res, next) => {
@@ -31,8 +36,14 @@ const signIn = async (req, res, next) => {
     sessionKey,
   });
 
+  const refreshJWT = createRefresh({
+    userId: String(user._id),
+    sessionKey,
+  });
+
   res.json({
     token: accessJWT,
+    refreshToken: refreshJWT,
     user: {
       id: user._id,
       email: user.email,
