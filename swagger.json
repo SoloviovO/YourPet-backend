@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.2",
+    "version": "1.0.3",
     "title": "Swagger YourPet",
     "description": "Showing off swagger-ui-express"
   },
@@ -12,6 +12,10 @@
     {
       "name": "Users",
       "description": "Authorization endpoints"
+    },
+    {
+      "name": "User",
+      "description": "Users endpoints"
     },
     {
       "name": "Notices",
@@ -32,7 +36,7 @@
   ],
 
   "paths": {
-    "/users/register": {
+    "/auth/register": {
       "post": {
         "tags": ["Users"],
         "summary": "Registration",
@@ -71,9 +75,10 @@
         }
       }
     },
-    "/users/login": {
+    "/auth/login": {
       "post": {
-        "tags": ["Users"],
+        "tags": ["Auth"],
+
         "summary": "Login",
         "parameters": [],
 
@@ -113,9 +118,10 @@
         }
       }
     },
-    "/users/logout": {
+    "/auth/logout": {
       "post": {
-        "tags": ["Users"],
+        "tags": ["Auth"],
+
         "summary": "Logout",
         "parameters": [],
 
@@ -174,14 +180,15 @@
             },
             "birthday": {
               "type": "string",
-              "format": "data"
+              "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
             },
             "phone": {
               "type": "string",
-              "format": "phone"
+              "pattern": "^(/^\\+380\\d{9}$/)$"
             },
             "city": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$"
             },
             "image": {
               "type": "string",
@@ -226,42 +233,60 @@
             "token": {
               "type": "string"
             },
-            "id": {
-              "type": "integer"
-            },
-            "email": {
-              "type": "string",
-              "format": "email"
-            },
-            "name": {
+            "refreshToken": {
               "type": "string"
             },
-            "birthday": {
-              "type": "string"
-            },
-            "phone": {
-              "type": "string",
-              "format": "phone"
-            },
-            "city": {
-              "type": "string"
-            },
-            "image": {
-              "type": "string",
-              "format": "binary"
+            "user": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "birthday": {
+                  "type": "string",
+                  "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+                },
+                "phone": {
+                  "type": "string",
+                  "pattern": "^(/^\\+380\\d{9}$/)$"
+                },
+                "city": {
+                  "type": "string",
+                  "pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$"
+                },
+                "image": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+
             }
           }
         },
         "example": [
           {
             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDRiNmQ5NzU2YjljMzc2OTg0YjE0MDgiLCJzZXNzaW9uS2V5IjoiNGEwZTQ1M2EtN2NiMS00ZTgwLTllMTgtYmU0ZTQ3YzJhYjI1IiwiaWF0IjoxNjgyNjczOTI1LCJleHAiOjE2ODI2NzU3MjV9.nd49ejNfSriW6S3dSDAPfUpscukVtgQvN1fsd9y2uFc",
-            "id": "6453bbe29b2611f1d181cb07",
-            "email": "1@gmail.com",
-            "name": "Name",
-            "birthday": "2001-03-20",
-            "phone": "+380952351628",
-            "city": "Kyiv",
-            "image": "//www.gravatar.com/avatar/91d8e7d123dbd461a0662e6d76d58c0f"
+
+            "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDU2MjRmYmQxYzBlYmM2NmNjZGIwMGEiLCJzZXNzaW9uS2V5IjoiYzFjMjMzNTYtNWI3Yy00MjFkLWFmNzAtYjM5YjE2OGIxNDk3IiwiaWF0IjoxNjgzNDExMjg0LCJleHAiOjE4NjM0MTEyODR9.0QXD5iPujHoow3aExltvoAO208s5Z5h56pmg8Oj-mno",
+
+            "user": {
+              "id": "645624fbd1c0ebc66ccdb00a",
+              "email": "heyekep@soombo.com",
+              "name": "4440-09-",
+              "birthday": "11.11.1131",
+              "phone": "+380000000000",
+              "city": "Sumny",
+              "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889"
+          }
+      
+
           }
         ]
       }
