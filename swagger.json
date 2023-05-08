@@ -1,7 +1,8 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.2",
+    "version": "1.0.4",
+
     "title": "Swagger YourPet",
     "description": "Showing off swagger-ui-express"
   },
@@ -10,8 +11,12 @@
   "servers": [{ "url": "https://yourpet-backend.onrender.com/api" }],
   "tags": [
     {
-      "name": "Users",
+      "name": "Auth",
       "description": "Authorization endpoints"
+    },
+    {
+      "name": "User",
+      "description": "Users endpoints"
     },
     {
       "name": "Notices",
@@ -32,9 +37,9 @@
   ],
 
   "paths": {
-    "/users/register": {
+    "/auth/register": {
       "post": {
-        "tags": ["Users"],
+        "tags": ["Auth"],
         "summary": "Registration",
         "parameters": [],
 
@@ -71,9 +76,9 @@
         }
       }
     },
-    "/users/login": {
+    "/auth/login": {
       "post": {
-        "tags": ["Users"],
+        "tags": ["Auth"],
         "summary": "Login",
         "parameters": [],
 
@@ -113,9 +118,45 @@
         }
       }
     },
-    "/users/logout": {
+    "/auth/refresh": {
       "post": {
-        "tags": ["Users"],
+        "tags": ["Auth"],
+        "summary": "Refresh token",
+        "parameters": [],
+
+        "requestBody": {
+          "description": "Refresh token",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshResponse"
+                }
+              }
+            }
+          },
+
+          "403": {
+            "description": "Token invalid",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+
         "summary": "Logout",
         "parameters": [],
 
@@ -133,6 +174,38 @@
           "204": {
             "description": "Deleted successfully"
           }
+        }
+      }
+    },
+ 
+    "/user/current": {
+      "get": {
+        "tags": ["User"],
+        "summary": "User current",
+        "parameters": [],
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CurrentRequest"
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentResponse"
+                }
+              }
+            }
+          }
+ 
         }
       }
     }
@@ -174,14 +247,15 @@
             },
             "birthday": {
               "type": "string",
-              "format": "data"
+              "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
             },
             "phone": {
               "type": "string",
-              "format": "phone"
+              "pattern": "^(/^\\+380\\d{9}$/)$"
             },
             "city": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$"
             },
             "image": {
               "type": "string",
@@ -191,13 +265,15 @@
         },
         "example": [
           {
-            "id": "6453bbe29b2611f1d181cb07",
-            "email": "1@gmail.com",
-            "name": "Name",
-            "birthday": "2001-03-20",
-            "phone": "+380952351628",
-            "city": "Kyiv",
-            "image": "//www.gravatar.com/avatar/91d8e7d123dbd461a0662e6d76d58c0f"
+            "user": {
+              "id": "645624fbd1c0ebc66ccdb00a",
+              "email": "heyekep@soombo.com",
+              "name": "Name",
+              "birthday": "11.11.1131",
+              "phone": "+380000000000",
+              "city": "Sumny",
+              "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889"
+          }
           }
         ]
       },
@@ -226,56 +302,233 @@
             "token": {
               "type": "string"
             },
-            "id": {
-              "type": "integer"
-            },
-            "email": {
-              "type": "string",
-              "format": "email"
-            },
-            "name": {
+            "refreshToken": {
               "type": "string"
             },
-            "birthday": {
-              "type": "string"
-            },
-            "phone": {
-              "type": "string",
-              "format": "phone"
-            },
-            "city": {
-              "type": "string"
-            },
-            "image": {
-              "type": "string",
-              "format": "binary"
+            "user": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "birthday": {
+                  "type": "string",
+                  "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+                },
+                "phone": {
+                  "type": "string",
+                  "pattern": "^(/^\\+380\\d{9}$/)$"
+                },
+                "city": {
+                  "type": "string",
+                  "pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$"
+                },
+                "image": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
             }
           }
         },
         "example": [
           {
             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDRiNmQ5NzU2YjljMzc2OTg0YjE0MDgiLCJzZXNzaW9uS2V5IjoiNGEwZTQ1M2EtN2NiMS00ZTgwLTllMTgtYmU0ZTQ3YzJhYjI1IiwiaWF0IjoxNjgyNjczOTI1LCJleHAiOjE2ODI2NzU3MjV9.nd49ejNfSriW6S3dSDAPfUpscukVtgQvN1fsd9y2uFc",
-            "id": "6453bbe29b2611f1d181cb07",
-            "email": "1@gmail.com",
-            "name": "Name",
-            "birthday": "2001-03-20",
-            "phone": "+380952351628",
-            "city": "Kyiv",
-            "image": "//www.gravatar.com/avatar/91d8e7d123dbd461a0662e6d76d58c0f"
+            "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDU2MjRmYmQxYzBlYmM2NmNjZGIwMGEiLCJzZXNzaW9uS2V5IjoiYzFjMjMzNTYtNWI3Yy00MjFkLWFmNzAtYjM5YjE2OGIxNDk3IiwiaWF0IjoxNjgzNDExMjg0LCJleHAiOjE4NjM0MTEyODR9.0QXD5iPujHoow3aExltvoAO208s5Z5h56pmg8Oj-mno",
+
+            "user": {
+              "id": "645624fbd1c0ebc66ccdb00a",
+              "email": "heyekep@soombo.com",
+              "name": "Name",
+              "birthday": "11.11.1131",
+              "phone": "+380000000000",
+              "city": "Sumny",
+              "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889"
+          }
+      
           }
         ]
-      }
-    },
-    "LogoutRequest": {
-      "type": "object",
-      "required": ["id"],
-      "properties": {
-        "id": {
-          "type": "string",
-          "example": "6453bbe29b2611f1d181cb07"
+      },
+      "RefreshRequest": {
+        "type": "object",
+        "required": ["refreshToken"],
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDU2MjRmYmQxYzBlYmM2NmNjZGIwMGEiLCJzZXNzaW9uS2V5IjoiYzFjMjMzNTYtNWI3Yy00MjFkLWFmNzAtYjM5YjE2OGIxNDk3IiwiaWF0IjoxNjgzNDExMjg0LCJleHAiOjE4NjM0MTEyODR9.0QXD5iPujHoow3aExltvoAO208s5Z5h56pmg8Oj-mno"
+          }
         }
+      },
+      "RefreshResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string"
+            },
+            "refreshToken": {
+              "type": "string"
+
+            }
+       
+          }
+        },
+        "example": [
+          {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDRiNmQ5NzU2YjljMzc2OTg0YjE0MDgiLCJzZXNzaW9uS2V5IjoiNGEwZTQ1M2EtN2NiMS00ZTgwLTllMTgtYmU0ZTQ3YzJhYjI1IiwiaWF0IjoxNjgyNjczOTI1LCJleHAiOjE2ODI2NzU3MjV9.nd49ejNfSriW6S3dSDAPfUpscukVtgQvN1fsd9y2uFc",
+            "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDU2MjRmYmQxYzBlYmM2NmNjZGIwMGEiLCJzZXNzaW9uS2V5IjoiYzFjMjMzNTYtNWI3Yy00MjFkLWFmNzAtYjM5YjE2OGIxNDk3IiwiaWF0IjoxNjgzNDExMjg0LCJleHAiOjE4NjM0MTEyODR9.0QXD5iPujHoow3aExltvoAO208s5Z5h56pmg8Oj-mno"
+    
+          }
+        ]
+      },
+      "LogoutRequest": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "6453bbe29b2611f1d181cb07"
+          }
+        }
+      },
+      "CurrentRequest": {
+        "type": "object",
+        "required": ["user"],
+        "properties": {
+          "user": {
+            "type": "object"
+          
+          }
+        }
+      },
+      "CurrentResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {         
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "birthday": {
+                  "type": "string",
+                  "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+                },
+                "phone": {
+                  "type": "string",
+                  "pattern": "^(/^\\+380\\d{9}$/)$"
+                },
+                "city": {
+                  "type": "string",
+                  "pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$"
+                },
+                "image": {
+                  "type": "string",
+                  "format": "binary"
+                },
+                "favorite": [{
+                  "_id": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "birthday": {
+                    "type": "string",
+                    "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+                  },
+                  "breed": {
+                    "type": "string"
+                  }, 
+                  "location": {
+                    "type": "string"
+                  }, 
+                  "sex": {
+                    "type": "string",
+                    "example": "male or female"
+                  },
+                  "category": {
+                    "type": "string"
+                    
+                  },
+                  "price": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "pattern": "^(/^\\+380\\d{9}$/)$"
+                  },
+                  "comments": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }],
+                "pets" :[
+                  
+                ]
+              
+            }
+          }
+        },
+        "example": [
+          {
+            "id": "645624fbd1c0ebc66ccdb00a",
+            "email": "heyekep@soombo.com",
+            "name": "Name",
+            "birthday": "11.11.1131",
+            "phone": "+380000000000",
+            "city": "Sumny",
+            "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
+            "favorite": [
+                {
+                    "_id": "6454eb3f52f8c3f6336741b1",
+                    "title": "Adorable kitten",
+                    "name": "Snowball",
+                    "birthday": "15.05.2021",
+                    "breed": "Siamese",
+                    "location": "London",
+                    "sex": "female",
+                    "category": "sell",
+                    "price": "800$",
+                    "email": "user3@net.com",
+                    "phone": "+380661234567",
+                    "comments": "She is litter box trained and loves to cuddle!",
+                    "image": "https://source.unsplash.com/random?animals&cat&dog"
+                }
+            ],
+            "pets": []
+        }
+        
+        ]
       }
     }
+  
   },
 
   "securitySchemes": {

@@ -6,8 +6,10 @@ require("dotenv").config();
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
 
-const userRouter = require("./routes/auth");
+const authRouter = require("./routes/auth");
+const userRouter = require("./routes/users");
 const noticeRouter = require("./routes/notice");
+const petsRouter = require("./routes/pets");
 const friendsRouter = require("./routes/friends");
 const newsRouter = require("./routes/news");
 const { errorHandlingMiddleware } = require("./middlewares");
@@ -21,8 +23,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-app.use("/api/users", userRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 app.use("/api/notices", noticeRouter);
+app.use("/api/pets", petsRouter);
 app.use("/api/friends", friendsRouter);
 app.use("/api/news", newsRouter);
 
