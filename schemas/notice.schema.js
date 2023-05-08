@@ -4,9 +4,9 @@ const addNoticeSchema = Joi.object({
   category: Joi.string()
     .valid("sell", "lost/found", "in good hands")
     .required(),
-  titleOfAd: Joi.string(),
-  dateOfBirth: Joi.string(),
-  namePet: Joi.string(),
+  title: Joi.string(),
+  birthday: Joi.string().pattern(/^\d{2}\.\d{2}\.\d{4}$/),
+  name: Joi.string(),
   breed: Joi.string(),
   sex: Joi.string().valid("male", "female").required(),
   location: Joi.string().required(),
@@ -19,8 +19,8 @@ const addNoticeCategorySchema = Joi.object({
     .valid("sell", "lost/found", "in good hands")
     .required(),
   title: Joi.string(),
-  dateOfBirth: Joi.string(),
-  namePet: Joi.string(),
+  birthday: Joi.string().pattern(/^\d{2}\.\d{2}\.\d{4}$/),
+  name: Joi.string(),
   breed: Joi.string(),
   sex: Joi.string().valid("male", "female").required(),
   location: Joi.string().required(),

@@ -14,6 +14,7 @@ router.post(
   uploadCloud.single("avatar"),
   controllerWrapper(petsController.addUserPet)
 );
+
 router.delete("/:id", controllerWrapper(petsController.deleteUserPet));
 
 module.exports = router;

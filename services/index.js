@@ -8,7 +8,6 @@ const {
   veryfyRefresh,
 } = require("./jwt.service");
 const { controllerWrapper } = require("./controller-wrapper.service");
-const { sendEmail } = require("./sendEmail.service");
 
 module.exports = {
   createHash,
@@ -17,7 +16,6 @@ module.exports = {
   createJWT,
   veryfyJWT,
   controllerWrapper,
-  sendEmail,
   createRefresh,
   veryfyRefresh,
 };
