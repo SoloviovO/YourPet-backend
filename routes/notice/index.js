@@ -3,7 +3,7 @@ const express = require("express");
 const noticesController = require("../../controllers/notices");
 
 const { schemas } = require("../../schemas/notice.schema");
-// const { schemas } = require("../../schemas/notice.schema");
+
 const {
   userAuthMiddleware,
   upload,
@@ -23,10 +23,14 @@ router.get(
 router.get("/:id", controllerWrapper(noticesController.getOneNotice));
 router.post(
   "/",
-  // upload.single("image"),
   uploadCloud.single("avatar"),
   userAuthMiddleware,
   controllerWrapper(noticesController.addNotice)
+);
+router.delete(
+  "/:id",
+  userAuthMiddleware,
+  controllerWrapper(noticesController.deleteNotice)
 );
 
 module.exports = router;
