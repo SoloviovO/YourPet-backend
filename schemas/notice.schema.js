@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const addNoticeSchema = Joi.object({
   category: Joi.string()
-    .valid("sell", "lost/found", "lost/found")
+    .valid("sell", "lost/found", "in good hands")
     .required(),
   title: Joi.string(),
   birthday: Joi.string().pattern(/^\d{2}\.\d{2}\.\d{4}$/),
