@@ -62,3 +62,5 @@ const addNotice = async (req, res) => {
 module.exports = {
   addNotice,
 };
+
+//test
