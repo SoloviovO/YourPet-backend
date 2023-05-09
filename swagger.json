@@ -1,14 +1,14 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.4",
+    "version": "1.0.5",
 
     "title": "Swagger YourPet",
     "description": "Showing off swagger-ui-express"
   },
   "consumes": ["appliation/json"],
   "produces": ["application/json"],
-  "servers": [{ "url": "https://yourpet-backend.onrender.com/api" }],
+  "servers": [{ "url": "http://localhost:3000/api" }],
   "tags": [
     {
       "name": "Auth",
@@ -177,7 +177,6 @@
         }
       }
     },
- 
     "/user/current": {
       "get": {
         "tags": ["User"],
