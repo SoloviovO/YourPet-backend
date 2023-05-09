@@ -1,10 +1,9 @@
 const { getNoticesList } = require("./noticesList");
 const { getOneNotice } = require("./notices-findOne");
-const {
-  getCategory,
-  addNotice,
-  getNoticesByOwnerId,
-} = require("./notices-category");
+const { getCategory } = require("./getCategory");
+const { addNotice } = require("./addNotice");
+const { getNoticesByOwnerId } = require("./getNoticesByOwnerId");
+const { deleteNotice } = require("./deleteNotice");
 
 module.exports = {
   getNoticesList,
@@ -12,4 +11,5 @@ module.exports = {
   addNotice,
   getOneNotice,
   getNoticesByOwnerId,
+  deleteNotice,
 };

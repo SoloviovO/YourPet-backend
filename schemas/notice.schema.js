@@ -4,32 +4,31 @@ const addNoticeSchema = Joi.object({
   category: Joi.string()
     .valid("sell", "lost/found", "in good hands")
     .required(),
-  title: Joi.string(),
+  title: Joi.string().min(2).max(16).required(),
   birthday: Joi.string().pattern(/^\d{2}\.\d{2}\.\d{4}$/),
-  name: Joi.string(),
-  breed: Joi.string(),
+  name: Joi.string().min(2).max(16).required(),
+  breed: Joi.string().min(2).max(16).required(),
   sex: Joi.string().valid("male", "female").required(),
-  location: Joi.string().required(),
-  price: Joi.string(),
-  comments: Joi.string(),
-});
-
-const addNoticeCategorySchema = Joi.object({
-  category: Joi.string()
-    .valid("sell", "lost/found", "in good hands")
-    .required(),
-  title: Joi.string(),
-  birthday: Joi.string().pattern(/^\d{2}\.\d{2}\.\d{4}$/),
-  name: Joi.string(),
-  breed: Joi.string(),
-  sex: Joi.string().valid("male", "female").required(),
-  location: Joi.string().required(),
-  price: Joi.string(),
-  comments: Joi.string(),
-  // image: Joi.object({
-  //   data: Joi.binary().required(),
-  //   contentType: Joi.string().required(),
-  // }).required(),
+  location: Joi.string()
+    .pattern(/^[A-Za-z ]+$/)
+    .min(2)
+    .max(50)
+    .when("category", {
+      is: Joi.valid("sell", "lost/found", "for-free"),
+      then: Joi.required(),
+      otherwise: Joi.optional(),
+    }),
+  price: Joi.number()
+    .min(0)
+    .when("category", {
+      is: "sell",
+      then: Joi.number().min(1).required(),
+      otherwise: Joi.optional(),
+    }),
+  comments: Joi.string()
+    .min(8)
+    .max(120)
+    .regex(/^[\s\S]*.*[^\s][\s\S]*$/),
 });
 
 const getCategorySchema = Joi.object({
@@ -39,7 +38,6 @@ const getCategorySchema = Joi.object({
 const noticeSchemas = {
   addNoticeSchema,
   getCategorySchema,
-  addNoticeCategorySchema,
 };
 
 module.exports = { noticeSchemas };

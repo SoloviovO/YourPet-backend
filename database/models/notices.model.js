@@ -6,6 +6,7 @@ const noticesSchema = new Schema(
   {
     title: {
       type: String,
+      required: true,
     },
     name: {
       type: String,
@@ -51,6 +52,14 @@ const noticesSchema = new Schema(
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    phone: {
+      type: String,
       required: true,
     },
   },
