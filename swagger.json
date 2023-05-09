@@ -1,10 +1,10 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.4",
+    "version": "1.0.6",
 
     "title": "Swagger YourPet",
-    "description": "Showing off swagger-ui-express"
+    "description": "This is the server of the YourPet website."
   },
   "consumes": ["appliation/json"],
   "produces": ["application/json"],
@@ -123,7 +123,7 @@
         "tags": ["Auth"],
         "summary": "Refresh token",
         "parameters": [],
-
+        "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Refresh token",
           "required": true,
@@ -159,7 +159,7 @@
 
         "summary": "Logout",
         "parameters": [],
-
+        "security": [{ "Bearer": [] }],
         "requestBody": {
           "required": true,
           "content": {
@@ -177,24 +177,12 @@
         }
       }
     },
- 
     "/user/current": {
       "get": {
         "tags": ["User"],
         "summary": "User current",
         "parameters": [],
-
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CurrentRequest"
-              }
-            }
-          }
-        },
-
+        "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
             "content": {
@@ -205,7 +193,93 @@
               }
             }
           }
- 
+        }
+      }
+    },
+    "/user/update": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "UpdateUserInfo",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "UserInfo object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user/avatars": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Avatar",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "UserInfo object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/AvatarRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvatarResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/favorite": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Favorite",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CryResponse"
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -399,16 +473,6 @@
           }
         }
       },
-      "CurrentRequest": {
-        "type": "object",
-        "required": ["user"],
-        "properties": {
-          "user": {
-            "type": "object"
-          
-          }
-        }
-      },
       "CurrentResponse": {
         "type": "array",
         "items": {
@@ -525,6 +589,123 @@
             "pets": []
         }
         
+        ]
+      },
+      "UpdateRequest": {
+        "type": "object",
+        "enum": ["name", "email", "birthday", "phone", "city"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "name": {
+            "type": "string"
+          },
+          "birthday": {
+            "type": "string",
+            "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+          },
+          "phone": {
+            "type": "string",
+            "pattern": "^(/^\\+380\\d{9}$/)$"
+          },
+          "city": {
+            "type": "string",
+            "pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$",
+            "example": "Lviv"
+          }
+        }
+      },
+      "UpdateResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "passwordHash": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "birthday": {
+                  "type": "string",
+                  "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+                },
+                "phone": {
+                  "type": "string",
+                  "pattern": "^(/^\\+380\\d{9}$/)$"
+                },
+                "city": {
+                  "type": "string",
+                  "pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$",
+                  "example": "Lviv"
+                },
+                "image": {
+                  "type": "string",
+                  "format": "binary"
+                },
+                "favorite": [
+
+                ],
+                "pets" :[
+                  
+                ],
+                "sessionKey": {
+                  "type": "string"
+                }
+            }
+          }
+        },
+        "example": [
+          {
+            
+            "_id": "645624fbd1c0ebc66ccdb00a",
+            "passwordHash": "$2b$10$6ntmCd7hryZFRxEcm5Vuru2nDDSNGKGwEA3LXr0OQW7bOxIfCV/iq",
+            "name": "Name",
+            "email": "heyekep@soombo.com",
+            "birthday": "11.11.1131",
+            "phone": "+380000000000",
+            "city": "Sumny",
+            "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
+            "favorite": [],
+            "pets": [],
+            "sessionKey": "5037cd19-9d58-4844-b413-ff237c100a45"
+                
+          }
+        ]
+      },
+      "AvatarRequest": {
+        "type": "object",
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "AvatarResponse": {
+          "type": "object",
+          "properties": {
+            "image": {
+              "type": "string",
+              "format": "binary"
+            }
+          },
+        "example": [
+          {
+            "image": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1683411947/iz0dnt2broomqznxmgjv.png"
+    
+          }
         ]
       }
     }
