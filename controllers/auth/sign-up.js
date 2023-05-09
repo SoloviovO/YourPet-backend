@@ -1,10 +1,5 @@
 const { UserModel } = require("../../database/models/user.model");
-const crypto = require("crypto");
-const {
-  createHash,
-  createHttpException,
-  createJWT,
-} = require("../../services");
+const { createHash, createHttpException } = require("../../services");
 const { addUserSchema } = require("../../schemas");
 const gravatar = require("gravatar");
 
@@ -27,11 +22,6 @@ const signUp = async (req, res, next) => {
     passwordHash,
     image,
   });
-
-  const sessionKey = crypto.randomUUID();
-  await UserModel.findByIdAndUpdate(newUser._id, { sessionKey });
-
-  const accessJWT = createJWT({ userId: String(newUser._id), sessionKey });
 
   res.status(201).json({
     user: {

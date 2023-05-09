@@ -1,11 +1,7 @@
 const express = require("express");
 const authController = require("../../controllers/auth");
 const { controllerWrapper } = require("../../services");
-const {
-  userAuthMiddleware,
-  upload,
-  uploadCloud,
-} = require("../../middlewares");
+const { userAuthMiddleware } = require("../../middlewares");
 
 const router = express.Router();
 

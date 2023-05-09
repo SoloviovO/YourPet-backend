@@ -21,6 +21,7 @@ const userSchema = mongoose.Schema(
     birthday: {
       type: String,
       default: "00.00.0000",
+      required: true,
     },
     phone: {
       type: String,
@@ -33,7 +34,6 @@ const userSchema = mongoose.Schema(
     },
     image: {
       type: String,
-      required: true,
     },
     favorite: {
       type: Array,
@@ -41,14 +41,14 @@ const userSchema = mongoose.Schema(
     },
     pets: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: "pets",
-      // default: [],
+      ref: "pet",
+      default: [],
     },
     notices: [
       {
         type: [mongoose.Schema.Types.ObjectId],
-        ref: "notices",
-        // default: [],
+        ref: "notice",
+        default: [],
       },
     ],
     sessionKey: {

@@ -9,6 +9,11 @@ const addUserSchema = Joi.object({
     .pattern(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,16})")),
 });
 
+const refreshSchema = Joi.object({
+  refreshToken: Joi.string().required(),
+});
+
 module.exports = {
   addUserSchema,
+  refreshSchema,
 };

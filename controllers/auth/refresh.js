@@ -1,4 +1,5 @@
 const { UserModel } = require("../../database/models");
+const { refreshSchema } = require("../../schemas/add-user.schema");
 const {
   veryfyRefresh,
   createHttpException,
@@ -8,6 +9,12 @@ const {
 
 const refresh = async (req, res, next) => {
   const { refreshToken } = req.body;
+
+  const { error } = refreshSchema.validate({ refreshToken });
+  if (error) {
+    throw createHttpException(400, error.message);
+  }
+
   const tokenPayload = veryfyRefresh(refreshToken);
   const sessionKey = tokenPayload.sessionKey;
   const isExist = await UserModel.findOne({
