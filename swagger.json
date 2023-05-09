@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.5",
+    "version": "1.0.6",
 
     "title": "Swagger YourPet",
     "description": "This is the server of the YourPet website."
@@ -275,7 +275,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CResponse"
+                  "$ref": "#/components/schemas/CryResponse"
                 }
               }
             }
