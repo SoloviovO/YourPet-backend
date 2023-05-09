@@ -45,6 +45,6 @@ const petsSchema = new Schema(
 
 // userSchema.post("save", handleMongooseError);
 
-const PetsModel = model("pet", petsSchema);
+const PetsModel = model("pets", petsSchema);
 
 module.exports = { PetsModel };
