@@ -6,4 +6,6 @@ const router = express.Router();
 
 router.get("/", controllerWrapper(newsController.news));
 
+router.get("/title", controllerWrapper(newsController.getNewsByTitle));
+
 module.exports = router;
