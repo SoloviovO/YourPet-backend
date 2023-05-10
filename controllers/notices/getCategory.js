@@ -12,7 +12,7 @@ const getCategory = async (req, res) => {
   if (error) {
     return res.status(400).json({
       error:
-        'Invalid category, please select one of: ["sell", "lost/found", "in good hands"]',
+        'Invalid category, please select one of: ["sell", "lost-found", "for-free"]',
     });
   }
 

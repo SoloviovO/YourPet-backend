@@ -330,7 +330,6 @@
           }
         }
       }
-
     },
     "/notices": {
       "post": {
@@ -359,7 +358,7 @@
             }
           },
           "400": {
-            "description": "Invalid category, please select one of next category: sell; lost/found; in good hands",
+            "description": "Invalid category, please select one of next category: sell; lost-found; for-free",
             "content": {}
           }
         }
@@ -970,8 +969,8 @@
       },
       "NoticesRequest": {
         "type": "object",
-        "enum": ["sell", "lost/found", "lost/found"],
-        "required" :["category"],
+        "enum": ["sell", "lost-found", "lost-found"],
+        "required": ["category"],
         "properties": {
           "category": {
             "type": "string"
@@ -979,50 +978,49 @@
         }
       },
       "NoticesResponse": {
-      
-            "type": "object",
-            "properties": {
-              "_id": {
-                "type": "string"
-              },
-              "title": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
-              },
-              "birthday": {
-                "type": "string",
-                "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
-              },
-              "breed": {
-                "type": "string"
-              },
-              "sex": {
-                "type": "string",
-                "example": "male or female"
-              },
-              "location": {
-                "type": "string"
-              },
-              "category": {
-                "type": "string"
-              },
-              "email": {
-                "type": "string",
-                "format": "email"
-              },
-              "phone": {
-                "type": "string",
-                "pattern": "^(/^\\+380\\d{9}$/)$"
-              },
-              "comments": {
-                "type": "string"
-              },
-              "image": {
-                "type": "string",
-                "format": "binary"
-              }
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "birthday": {
+            "type": "string",
+            "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+          },
+          "breed": {
+            "type": "string"
+          },
+          "sex": {
+            "type": "string",
+            "example": "male or female"
+          },
+          "location": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phone": {
+            "type": "string",
+            "pattern": "^(/^\\+380\\d{9}$/)$"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string",
+            "format": "binary"
+          }
         },
         "example": [
           {
@@ -1033,7 +1031,7 @@
             "breed": "Domestic Shorthair",
             "location": "New York",
             "sex": "male",
-            "category": "lost/found",
+            "category": "lost-found",
             "email": "jane@net.com",
             "phone": "+14155552678",
             "comments": "Socks is very social and loves to play!",
