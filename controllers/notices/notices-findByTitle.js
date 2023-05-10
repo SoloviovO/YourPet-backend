@@ -2,8 +2,7 @@ const { NoticesModel } = require("../../database/models");
 const { createHttpException } = require("../../services");
 
 const getNoticesByTitle = async (req, res) => {
-  const { title, category } = req.query;
-  const { page = 1, limit = 5 } = req.query;
+  const { title, category, page, limit } = req.query;
   const skip = (page - 1) * limit;
   if (!title) {
     throw createHttpException(404, "Not found");
