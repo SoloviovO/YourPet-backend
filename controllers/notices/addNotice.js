@@ -38,7 +38,7 @@ const addNotice = async (req, res) => {
     throw createHttpException(400, `missing required ${invalidField} field`);
   }
 
-  const result = await cloudinary.uploader.upload(req.file.path);
+  // const result = await cloudinary.uploader.upload(req.file.path);
 
   const newNotice = await NoticesModel.create({
     category,
@@ -50,7 +50,8 @@ const addNotice = async (req, res) => {
     location,
     price,
     comments,
-    image: result.secure_url,
+    // image: result.secure_url,
+    image: req.file.path,
     owner: user._id,
     email: user.email,
     phone: user.phone,
