@@ -1,12 +1,12 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.8",
+    "version": "1.0.9",
 
     "title": "Swagger YourPet",
     "description": "This is the server of the YourPet website."
   },
-  "consumes": ["appliation/json"],
+  "consumes": ["appliation/json", "multipart/form-data"],
   "produces": ["application/json"],
   "servers": [{ "url": "https://yourpet-backend.onrender.com/api" }],
   "tags": [
@@ -254,7 +254,7 @@
         "responses": {
           "200": {
             "content": {
-              "multipart/form-data": {
+              "appliation/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AvatarResponse"
                 }
@@ -287,9 +287,7 @@
       "post": {
         "tags": ["User"],
         "summary": "Add Favorite",
-        "parameters": [
-          
-        ],
+        "parameters": [],
         "security": [{ "Bearer": [] }],
         "responses": {
           "201": {
@@ -334,9 +332,343 @@
       }
     },
     "/notices": {
-      "post": {
+      "get": {
         "tags": ["Notices"],
         "summary": "Get notices by category",
+        "parameters": [],
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoticesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoticesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": ["Notices"],
+        "summary": "Ads notices to the selected category",
+        "parameters": [],
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoticesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoticesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/find": {
+      "get": {
+        "tags": ["Notices"],
+        "summary": "Find notice by title",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "schema": {
+              "type": "string",
+              "minLength": "2",
+              "maxLength": "16"
+            },
+            "description": "The value is assigned to the title",
+            "required": true
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindeTitleResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/user": {
+      "get": {
+        "tags": ["Notices"],
+        "summary": "Notices by authorized user",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "schema": {
+              "type": "string",
+              "minLength": "2",
+              "maxLength": "16"
+            },
+            "description": "The value is assigned to the title",
+            "required": true
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindeTitleResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/{id}": {
+      "get": {
+        "tags": ["Notices"],
+        "summary": "Get full info about notice",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "schema": {
+              "type": "string",
+              "minLength": "2",
+              "maxLength": "16"
+            },
+            "description": "The value is assigned to the title",
+            "required": true
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindeTitleResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Notices"],
+        "summary": "Delete notice by authorized user",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "schema": {
+              "type": "string",
+              "minLength": "2",
+              "maxLength": "16"
+            },
+            "description": "The value is assigned to the title",
+            "required": true
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindeTitleResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/friends": {
+      "get": {
+        "tags": ["Friends"],
+        "summary": "Get friends or sponsor",
+        "parameters": [],
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoticesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoticesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/news": {
+      "get": {
+        "tags": ["News"],
+        "summary": "Get news",
+        "parameters": [],
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoticesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoticesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/news/title": {
+      "get": {
+        "tags": ["News"],
+        "summary": "Found news by title",
+        "parameters": [],
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoticesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoticesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/pets": {
+      "post": {
+        "tags": ["Pets"],
+        "summary": "Add your pet",
+        "parameters": [],
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoticesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoticesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/pets/{id}": {
+      "delete": {
+        "tags": ["Pets"],
+        "summary": "Delete pet by authorized user",
         "parameters": [],
 
         "requestBody": {
@@ -798,7 +1130,11 @@
                 "type": "string",
                 "format": "binary"
               },
-              "favorite": [],
+              "favorite": [
+                {
+                  "$ref": "#/components/schemas/FindeTitleResponse"
+                }
+              ],
               "pets": [],
               "notices": []
             }
@@ -971,15 +1307,11 @@
       },
       "NoticesRequest": {
         "type": "object",
-
-        
-        "required" :["category"],
-
+        "required": ["category"],
         "properties": {
           "category": {
             "type": "string",
             "enum": ["sell", "lost-found", "for-free"]
-
           }
         }
       },
@@ -1045,6 +1377,72 @@
           }
         ]
       },
+      "FindeTitleResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "birthday": {
+              "type": "string",
+              "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+            },
+            "breed": {
+              "type": "string"
+            },
+            "sex": {
+              "type": "string",
+              "example": "male or female"
+            },
+            "location": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "phone": {
+              "type": "string",
+              "pattern": "^(/^\\+380\\d{9}$/)$"
+            },
+            "comments": {
+              "type": "string"
+            },
+            "image": {
+              "type": "string",
+              "format": "binary"
+            }
+          }
+        },
+        "example": [
+          {
+            "_id": "637216768f895fcabfd83e67",
+            "title": "Graceful cat",
+            "name": "Luna",
+            "birthday": "20.03.2021",
+            "breed": "Persian",
+            "location": "Paris",
+            "sex": "female",
+            "category": "sell",
+            "price": "1200$",
+            "email": "user9@net.com",
+            "phone": "+380661234567",
+            "comments": "She has beautiful long fur and is very graceful!",
+            "image": "https://source.unsplash.com/random?animals&cat&dog"
+          }
+        ]
+      },
 
       "Favorite": {
         "type": "object",
@@ -1097,6 +1495,52 @@
               }
             }
           ]
+        }
+      },
+      "Notices": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "birthday": {
+            "type": "string",
+            "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+          },
+          "breed": {
+            "type": "string"
+          },
+          "sex": {
+            "type": "string",
+            "example": "male or female"
+          },
+          "location": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phone": {
+            "type": "string",
+            "pattern": "^(/^\\+380\\d{9}$/)$"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string",
+            "format": "binary"
+          }
         }
       }
     }
