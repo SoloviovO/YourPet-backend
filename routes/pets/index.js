@@ -2,7 +2,6 @@ const express = require("express");
 
 const petsController = require("../../controllers/pets");
 
-// const { schemas } = require("../../schemas");
 const { userAuthMiddleware, uploadCloud } = require("../../middlewares");
 const { controllerWrapper } = require("../../services");
 

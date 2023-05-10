@@ -1,7 +1,5 @@
 const { Schema, model } = require("mongoose");
 
-// const handleMongooseError = require("");
-
 const petsSchema = new Schema(
   {
     name: {
@@ -42,8 +40,6 @@ const petsSchema = new Schema(
     timestamps: false,
   }
 );
-
-// userSchema.post("save", handleMongooseError);
 
 const PetsModel = model("pets", petsSchema);
 
