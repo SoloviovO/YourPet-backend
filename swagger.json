@@ -283,11 +283,13 @@
         }
       }
     },
-    "/user/favorite/:id": {
+    "/user/favorite/{id}": {
       "post": {
         "tags": ["User"],
         "summary": "Add Favorite",
-        "parameters": [],
+        "parameters": [
+          
+        ],
         "security": [{ "Bearer": [] }],
         "responses": {
           "201": {
@@ -970,11 +972,13 @@
       },
       "NoticesRequest": {
         "type": "object",
-        "enum": ["sell", "lost/found", "lost/found"],
+        
         "required" :["category"],
         "properties": {
           "category": {
-            "type": "string"
+            "type": "string",
+            "enum": ["sell", "lost/found", "lost/found"]
+
           }
         }
       },
