@@ -1,7 +1,7 @@
 const { NoticesModel } = require("../../database/models");
 const { createHttpException } = require("../../services");
 
-const getNoticesList = async (req, res) => {
+const getNoticesByTitle = async (req, res) => {
   const { title } = req.query;
   if (!title) {
     throw createHttpException(404, "Not found");
@@ -16,4 +16,4 @@ const getNoticesList = async (req, res) => {
   res.json(result);
 };
 
-module.exports = { getNoticesList };
+module.exports = { getNoticesByTitle };

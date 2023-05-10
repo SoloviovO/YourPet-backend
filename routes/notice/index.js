@@ -14,7 +14,7 @@ const { controllerWrapper } = require("../../services");
 const router = express.Router();
 
 router.get("/", noticesController.getCategory);
-router.get("/find", controllerWrapper(noticesController.getNoticesList));
+router.get("/find", controllerWrapper(noticesController.getNoticesByTitle));
 router.get(
   "/user",
   userAuthMiddleware,
