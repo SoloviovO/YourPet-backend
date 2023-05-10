@@ -290,6 +290,7 @@
         "parameters": [
           
         ],
+
         "security": [{ "Bearer": [] }],
         "responses": {
           "201": {
@@ -361,7 +362,9 @@
             }
           },
           "400": {
+
             "description": "Invalid category, please select one of next category: sell; lost/found; in good hands",
+
             "content": {}
           }
         }
@@ -1045,6 +1048,7 @@
           }
         ]
       },
+
 
       "Favorite": {
         "type": "object",

@@ -1,9 +1,11 @@
 const Joi = require("joi");
 
 const addNoticeSchema = Joi.object({
+
   category: Joi.string()
     .valid("sell", "lost/found", "lost/found")
     .required(),
+
   title: Joi.string().min(2).max(16).required(),
   birthday: Joi.string().pattern(/^\d{2}\.\d{2}\.\d{4}$/),
   name: Joi.string().min(2).max(16).required(),
@@ -14,7 +16,7 @@ const addNoticeSchema = Joi.object({
     .min(2)
     .max(50)
     .when("category", {
-      is: Joi.valid("sell", "lost/found", "for-free"),
+      is: Joi.valid("sell", "lost-found", "for-free"),
       then: Joi.required(),
       otherwise: Joi.optional(),
     }),
@@ -32,7 +34,7 @@ const addNoticeSchema = Joi.object({
 });
 
 const getCategorySchema = Joi.object({
-  category: Joi.string().valid("sell", "lost/found", "in good hands"),
+  category: Joi.string().valid("sell", "lost-found", "for-free"),
 });
 
 const noticeSchemas = {

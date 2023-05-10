@@ -35,19 +35,25 @@ const userSchema = mongoose.Schema(
     image: {
       type: String,
     },
-    favorite: {
-      type: Array,
-      default: [],
-    },
+    favorite: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "notices",
+      },
+    ],
+    // favorite: {
+    //   type: Array,
+    //   default: [],
+    // },
     pets: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: "pet",
+      ref: "pets",
       default: [],
     },
     notices: [
       {
         type: [mongoose.Schema.Types.ObjectId],
-        ref: "notice",
+        ref: "notices",
         default: [],
       },
     ],

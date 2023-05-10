@@ -1,13 +1,17 @@
 const { NoticesModel } = require("../../database/models");
 const { createHttpException } = require("../../services");
 
-const getNoticesList = async (req, res) => {
-  const { title } = req.query;
+const getNoticesByTitle = async (req, res) => {
+  const { title, category } = req.query;
+  const { page = 1, limit = 5 } = req.query;
+  const skip = (page - 1) * limit;
   if (!title) {
     throw createHttpException(404, "Not found");
   }
   const regex = new RegExp(title, "i");
-  const result = await NoticesModel.find({ title: regex });
+  const result = await NoticesModel.find({ title: regex, category })
+    .skip(skip)
+    .limit(limit);
 
   if (result.length === 0) {
     throw createHttpException(404, "Not found");
@@ -16,4 +20,4 @@ const getNoticesList = async (req, res) => {
   res.json(result);
 };
 
-module.exports = { getNoticesList };
+module.exports = { getNoticesByTitle };
