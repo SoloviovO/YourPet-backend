@@ -4,6 +4,8 @@ const getCurrentUser = async (req, res, next) => {
   const user = req.user;
   const result = await NoticesModel.find({ owner: user._id });
   const petsRes = await PetsModel.find({ owner: user._id });
+  const fav = await UserModel.findById(user._id).populate("favorite");
+
   res.json({
     id: user._id,
     email: user.email,
@@ -12,7 +14,8 @@ const getCurrentUser = async (req, res, next) => {
     phone: user.phone,
     city: user.city,
     image: user.image,
-    favorite: user.favorite,
+    // favorite: user.favorite,
+    favorite: fav.favorite,
     pets: petsRes,
     notices: result,
   });
