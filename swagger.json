@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.9",
+    "version": "1.0.10",
 
     "title": "Swagger YourPet",
     "description": "This is the server of the YourPet website."
@@ -409,7 +409,30 @@
               "maxLength": "16"
             },
             "description": "The value is assigned to the title",
+            "required": [true, "Set title for new"]
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "schema": {
+              "type": "string",
+              "enum": ["sell", "lost-found", "for-free"]
+            },
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number"
+            }
           }
         ],
 
@@ -434,33 +457,18 @@
       "get": {
         "tags": ["Notices"],
         "summary": "Notices by authorized user",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "title",
-            "schema": {
-              "type": "string",
-              "minLength": "2",
-              "maxLength": "16"
-            },
-            "description": "The value is assigned to the title",
-            "required": true
-          }
-        ],
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
 
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FindeTitleResponse"
+                  "$ref": "#/components/schemas/NoticesUserResponse"
                 }
               }
             }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {}
           }
         }
       }
@@ -471,24 +479,22 @@
         "summary": "Get full info about notice",
         "parameters": [
           {
-            "in": "query",
-            "name": "title",
+            "in": "path",
+            "name": "id",
             "schema": {
-              "type": "string",
-              "minLength": "2",
-              "maxLength": "16"
+              "type": "string"
             },
-            "description": "The value is assigned to the title",
             "required": true
           }
         ],
+        "security": [{ "Bearer": [] }],
 
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FindeTitleResponse"
+                  "$ref": "#/components/schemas/Notices"
                 }
               }
             }
@@ -504,30 +510,22 @@
         "summary": "Delete notice by authorized user",
         "parameters": [
           {
-            "in": "query",
-            "name": "title",
+            "in": "path",
+            "name": "_id",
             "schema": {
-              "type": "string",
-              "minLength": "2",
-              "maxLength": "16"
+              "type": "string"
             },
-            "description": "The value is assigned to the title",
             "required": true
           }
         ],
+        "security": [{ "Bearer": [] }],
 
         "responses": {
           "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FindeTitleResponse"
-                }
-              }
-            }
+            "description": "Delete success"
           },
           "404": {
-            "description": "Not found",
+            "description": "There is no such id",
             "content": {}
           }
         }
@@ -539,29 +537,15 @@
         "summary": "Get friends or sponsor",
         "parameters": [],
 
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NoticesRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NoticesResponse"
+                  "$ref": "#/components/schemas/FriendsResponse"
                 }
               }
             }
-          },
-          "400": {
-            "description": "Invalid category, please select one of next category: sell; lost-found; for-free",
-            "content": {}
           }
         }
       }
@@ -570,31 +554,32 @@
       "get": {
         "tags": ["News"],
         "summary": "Get news",
-        "parameters": [],
-
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NoticesRequest"
-              }
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number"
             }
           }
-        },
+        ],
+
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NoticesResponse"
+                  "$ref": "#/components/schemas/NewsResponse"
                 }
               }
             }
-          },
-          "400": {
-            "description": "Invalid category, please select one of next category: sell; lost-found; for-free",
-            "content": {}
           }
         }
       }
@@ -603,30 +588,45 @@
       "get": {
         "tags": ["News"],
         "summary": "Found news by title",
-        "parameters": [],
-
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NoticesRequest"
-              }
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "schema": {
+              "type": "string",
+              "minLength": "2",
+              "maxLength": "16"
+            },
+            "required": [true, "Set title for new"]
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number"
             }
           }
-        },
+        ],
+
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NoticesResponse"
+                  "$ref": "#/components/schemas/NewsResponse"
                 }
               }
             }
           },
-          "400": {
-            "description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+          "404": {
+            "description": "Your request is empty",
             "content": {}
           }
         }
@@ -637,30 +637,30 @@
         "tags": ["Pets"],
         "summary": "Add your pet",
         "parameters": [],
+        "security": [{ "Bearer": [] }],
 
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NoticesRequest"
+                "$ref": "#/components/schemas/PetsRequest"
               }
             }
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NoticesResponse"
+                  "$ref": "#/components/schemas/PetsResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid category, please select one of next category: sell; lost-found; for-free",
-            "content": {}
+            "description": "missing required field"
           }
         }
       }
@@ -669,31 +669,24 @@
       "delete": {
         "tags": ["Pets"],
         "summary": "Delete pet by authorized user",
-        "parameters": [],
-
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NoticesRequest"
-              }
-            }
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
           }
-        },
+        ],
+        "security": [{ "Bearer": [] }],
+
         "responses": {
           "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NoticesResponse"
-                }
-              }
-            }
+            "description": "Pet deleted"
           },
-          "400": {
-            "description": "Invalid category, please select one of next category: sell; lost-found; for-free",
-            "content": {}
+          "404": {
+            "description": "There is no such id"
           }
         }
       }
@@ -1400,6 +1393,7 @@
             },
             "sex": {
               "type": "string",
+              "enum": ["male ", "female"],
               "example": "male or female"
             },
             "location": {
@@ -1442,6 +1436,270 @@
             "image": "https://source.unsplash.com/random?animals&cat&dog"
           }
         ]
+      },
+      "NoticesUserResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "minLength": "2",
+            "maxLength": "16"
+          },
+          "name": {
+            "type": "string",
+            "minLength": "2",
+            "maxLength": "16"
+          },
+          "birthday": {
+            "type": "string",
+            "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+          },
+          "breed": {
+            "type": "string",
+            "minLength": "2",
+            "maxLength": "16"
+          },
+          "sex": {
+            "type": "string",
+            "example": "male or female"
+          },
+          "location": {
+            "type": "string",
+            "pattern": "^(/^[A-Za-z ]+$/)$",
+            "minLength": "2",
+            "maxLength": "50"
+          },
+          "category": {
+            "type": "string",
+            "example": "sell, lost-found, for-free"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phone": {
+            "type": "string",
+            "pattern": "^(/^\\+380\\d{9}$/)$"
+          },
+          "comments": {
+            "type": "string",
+            "minLength": "8",
+            "maxLength": "120"
+          },
+          "image": {
+            "type": "string",
+            "format": "binary"
+          },
+          "owner": {
+            "type": "string"
+          }
+        },
+        "example": [
+          {
+            "_id": "6454eb3f52f8c3f6336741b8",
+            "title": "Friendly cat",
+            "name": "Socks",
+            "birthday": "15.03.2019",
+            "breed": "Domestic Shorthair",
+            "location": "New York",
+            "sex": "male",
+            "category": "lost-found",
+            "email": "jane@net.com",
+            "phone": "+14155552678",
+            "comments": "Socks is very social and loves to play!",
+            "image": "https://source.unsplash.com/random?animals&cat&dog",
+            "owner": "6774eb3f45f8c3fs336741b8"
+          }
+        ]
+      },
+      "FriendsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "workDays": [
+              {
+                "isOpen": true,
+                "from": {
+                  "type": "number"
+                },
+                "to": {
+                  "type": "number"
+                }
+              }
+            ],
+            "_id": {
+              "type": "string"
+            },
+            " title": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "addressUrl": {
+              "type": "string"
+            },
+            "imageUrl": {
+              "type": "string",
+              "default": false
+            },
+            "address": {
+              "type": "string",
+              "default": null
+            },
+            "phone": {
+              "type": "string",
+              "pattern": "^(/^\\+380\\d{9}$/)$",
+              "default": null
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            }
+          }
+        },
+        "example": [
+          {
+            "workDays": [
+              {
+                "isOpen": true,
+                "from": "09:00",
+                "to": "20:00"
+              }
+            ],
+            "_id": "6455125c52f8c3f6336741f7",
+            "title": "Whiskas",
+            "url": "https://www.whiskas.ua/",
+            "addressUrl": null,
+            "imageUrl": "https://storage.googleapis.com/kidslikev2_bucket/pets-support/images/sponsors/frame_285.png",
+            "address": null,
+            "phone": "+380800500155",
+            "email": null
+          }
+        ]
+      },
+      "NewsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string",
+              "minLength": "2",
+              "maxLength": "16"
+            },
+            "url": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string",
+              "format": "date",
+              "default": null
+            }
+          },
+          "example": 
+            {
+              "_id": "6455123652f8c3f6336741da",
+              "title": "В День ветеринара в столиці пройде безкоштовний тренінг з надання першої допомоги тваринам",
+              "url": "https://www.kmlvm.com.ua/v-den-veterynara-v-stolytsi-projde-bezkoshtovnyj-trening-z-nadannya-pershoyi-dopomogy-tvarynam/",
+              "description": "В неділю, 14 серпня, в Тимчасовому притулку для тварин «ВДНГ» пройде тренінг на тему «Надання першої допомоги тваринам». Захід проводиться комунальним підприємством «Київська міська лікарня ветеринарної медицини», фахівці якого навчать всіх бажаючих навичкам надання першої допомоги братам нашим меншим, які потрапили в біду. Без перебільшення, подібні знання можуть врятувати життя чотирилапим. Тренінг безкоштовний, взяти в ньому участь може будь-хто, дозволяється участь зі своїм домашнім улюбленцем. Після тренінгу учасники зможуть отримати безкоштовну консультацію ветеринара, щодо догляду за тваринами, вакцинації та будь-яких інших питань, пов'язаними зі здоров'ям улюбленця. Дата проведення майстер-класу обрана не випадково. 14 серпня в Україні відзначається День працівників ветеринарної медицини і цього року ми вирішили провести такий потрібний тренінг. Для ветеринара головне – це врятовані брати наші менші, а навчити людей надавати первинну допомогу тваринам значить «інвестувати» у врятовані життя тварин в майбутньому. Початок тренінгу об 11:00. Адреса Тимчасового притулку для тварин «ВДНГ»: вулиця Академіка Глушкова, 1, 16 павільйон.",
+              "date": "2022-08-12"
+            }
+          
+        }
+      },
+      "PetsRequest": {
+        "type": "object",
+        "required": ["name", "dateOfBirth", "breed", "photoURL"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength":"2",
+            "maxLength":"16"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$",
+            "default": "00.00.0000"
+          },
+          "breed": {
+            "type": "string",
+            "minLength":"2",
+            "maxLength":"16"
+          },
+          "comments": {
+            "type": "string",
+            "minLength":"8",
+            "maxLength":"120"
+          },
+          "photoURL":{
+            "type": "string"
+          }
+        }
+      },
+      "PetsResponse": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength":"2",
+              "maxLength":"16"
+            },
+            "dateOfBirth": {
+              "type": "string",
+              "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$",
+              "default": "00.00.0000"
+            },
+            "breed": {
+              "type": "string",
+              "minLength":"2",
+              "maxLength":"16"
+            },
+            "photoURL":{
+              "type": "string"
+            },
+            "comments": {
+              "type": "string",
+              "minLength":"8",
+              "maxLength":"120"
+            },
+            "owner":{
+              "type": "string"
+            },
+            "_id": {
+              "type": "string"
+            },
+            "createdAt": {
+            "type": "string",
+            "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+              }
+        },
+        "example": 
+          {
+            "name": "Baddy",
+             "dateOfBirth": "12.03.2022",
+             "breed": "vivcharka",
+             "photoURL": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1683546305/gqslezwipr2dap8iktbx.jpg",
+              "comments": "Good boy",
+             "owner": "6458ca434bbf87bcf5b6f0c2",
+             "_id": "6458e0c1e0db665b6175aab2",
+             "createdAt": "2023-05-08T11:45:05.441Z",
+             "updatedAt": "2023-05-08T11:45:05.441Z"
+          }
       },
 
       "Favorite": {
@@ -1504,27 +1762,37 @@
             "type": "string"
           },
           "title": {
-            "type": "string"
+            "type": "string",
+            "minLength": "2",
+            "maxLength": "16"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "minLength": "2",
+            "maxLength": "16"
           },
           "birthday": {
             "type": "string",
             "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
           },
           "breed": {
-            "type": "string"
+            "type": "string",
+            "minLength": "2",
+            "maxLength": "16"
           },
           "sex": {
             "type": "string",
             "example": "male or female"
           },
           "location": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^(/^[A-Za-z ]+$/)$",
+            "minLength": "2",
+            "maxLength": "50"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "example": "sell, lost-found, for-free"
           },
           "email": {
             "type": "string",
@@ -1535,7 +1803,9 @@
             "pattern": "^(/^\\+380\\d{9}$/)$"
           },
           "comments": {
-            "type": "string"
+            "type": "string",
+            "minLength": "8",
+            "maxLength": "120"
           },
           "image": {
             "type": "string",
