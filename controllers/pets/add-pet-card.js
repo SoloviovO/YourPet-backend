@@ -5,7 +5,7 @@ const cloudinary = require("cloudinary").v2;
 
 const addUserPet = async (req, res) => {
   const { name, birthday, breed, comments } = req.body;
-  const { _id: owner } = req.user;
+  const { _id } = req.user;
 
   const { error } = addPetSchema.validate({ name, breed, birthday });
   if (error) {
@@ -21,7 +21,7 @@ const addUserPet = async (req, res) => {
     breed,
     image: result.secure_url,
     comments,
-    owner,
+    owner: _id,
   });
 
   res.status(201).json(newPet);
