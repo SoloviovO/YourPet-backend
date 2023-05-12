@@ -4,10 +4,13 @@ const { createHttpException } = require("../../services");
 
 const deleteNotice = async (req, res) => {
   const { id } = req.params;
-  const result = await NoticesModel.findByIdAndDelete(id);
+
+  const result = await NoticesModel.findByIdAndDelete(id).catch((error) => {
+    throw createHttpException(400, error.message);
+  });
 
   if (!result) {
-    throw createHttpException(404, "Not found");
+    throw createHttpException(404, "There is no such id");
   }
 
   res.json({

@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
-
-// const handleMongooseError = require("");
+const { PET_SEX, CATEGORY_TYPE } = require("../../enums");
 
 const noticesSchema = new Schema(
   {
@@ -31,12 +30,12 @@ const noticesSchema = new Schema(
     },
     sex: {
       type: String,
-      enum: ["male", "female"],
+      enum: Object.values(PET_SEX),
       required: [true, "Choose the sex of the animal, male or female"],
     },
     category: {
       type: String,
-      enum: ["sell", "lost-found", "for-free"],
+      enum: Object.values(CATEGORY_TYPE),
       required: true,
     },
     price: {
@@ -63,10 +62,11 @@ const noticesSchema = new Schema(
       required: true,
     },
   },
-  { versionKey: false, timestamps: false }
+  {
+    versionKey: false,
+    timestamps: false,
+  }
 );
-
-// userSchema.post("save", handleMongooseError);
 
 const NoticesModel = model("notices", noticesSchema);
 

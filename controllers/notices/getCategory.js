@@ -4,8 +4,8 @@ const { getCategorySchema } =
   require("../../schemas/notice.schema").noticeSchemas;
 
 const getCategory = async (req, res) => {
-  const { category } = req.query;
-  const { page = 1, limit = 5 } = req.query;
+  const { page = 1, limit = 5, category } = req.query;
+
   const skip = (page - 1) * limit;
 
   const { error } = getCategorySchema.validate({ category });

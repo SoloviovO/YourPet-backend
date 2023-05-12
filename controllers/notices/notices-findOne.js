@@ -9,6 +9,7 @@ const getOneNotice = async (req, res) => {
   if (!result) {
     throw createHttpException(404, "Not found");
   }
+
   res.json(result);
 };
 
