@@ -1,14 +1,14 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.12",
+    "version": "1.0.13",
 
     "title": "Swagger YourPet",
     "description": "This is the server of the YourPet website."
   },
   "consumes": ["appliation/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "https://yourpet-backend.onrender.com/api" }],
+  "servers": [{ "url": "http://localhost:3000/api" }],
   "tags": [
     {
       "name": "Auth",
@@ -75,7 +75,6 @@
       "post": {
         "tags": ["Auth"],
         "summary": "Login",
-        "parameters": [],
 
         "requestBody": {
           "description": "Login's object",
