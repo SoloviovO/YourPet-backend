@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.11",
+    "version": "1.0.12",
 
     "title": "Swagger YourPet",
     "description": "This is the server of the YourPet website."
@@ -161,7 +161,6 @@
       "get": {
         "tags": ["User"],
         "summary": "User current",
-        "parameters": [],
         "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
@@ -182,7 +181,7 @@
         "summary": "UpdateUserInfo",
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "UserInfo object",
+          "description": "Specify one of the :",
           "required": true,
           "content": {
             "application/json": {
@@ -323,18 +322,31 @@
       "get": {
         "tags": ["Notices"],
         "summary": "Get notices by category",
-        "parameters": [],
-
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NoticesRequest"
-              }
+        "parameters": [
+          {
+            "in": "query",
+            "name": "category",
+            "schema": {
+              "type": "string",
+              "enum": ["sell", "lost-found", "for-free"]
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "content": {
@@ -346,20 +358,18 @@
             }
           },
           "400": {
-            "description": "Invalid category, please select one of next category: sell; lost-found; for-free",
-            "content": {}
+            "description": "Invalid category, please select one of next category: sell; lost-found; for-free"
           }
         }
       },
       "post": {
         "tags": ["Notices"],
         "summary": "Ads notices to the selected category",
-        "parameters": [],
 
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/NoticesRequest"
               }
@@ -377,8 +387,7 @@
             }
           },
           "400": {
-            "description": "Invalid category, please select one of next category: sell; lost-found; for-free",
-            "content": {}
+            "description": "Invalid category, please select one of next category: sell; lost-found; for-free"
           }
         }
       }
@@ -435,8 +444,7 @@
             }
           },
           "404": {
-            "description": "Not found",
-            "content": {}
+            "description": "Not found"
           }
         }
       }
@@ -445,7 +453,6 @@
       "get": {
         "tags": ["Notices"],
         "summary": "Notices by authorized user",
-        "parameters": [],
         "security": [{ "Bearer": [] }],
 
         "responses": {
@@ -488,8 +495,7 @@
             }
           },
           "404": {
-            "description": "Not found",
-            "content": {}
+            "description": "Not found"
           }
         }
       },
@@ -513,8 +519,7 @@
             "description": "Delete success"
           },
           "404": {
-            "description": "There is no such id",
-            "content": {}
+            "description": "There is no such id"
           }
         }
       }
@@ -523,7 +528,6 @@
       "get": {
         "tags": ["Friends"],
         "summary": "Get friends or sponsor",
-        "parameters": [],
 
         "responses": {
           "200": {
@@ -626,7 +630,6 @@
       "post": {
         "tags": ["Pets"],
         "summary": "Add your pet",
-        "parameters": [],
         "security": [{ "Bearer": [] }],
 
         "requestBody": {
@@ -854,11 +857,11 @@
             "format": "binary"
           },
           "favorite": {
-              "$ref": "#/components/schemas/Favorite"
+            "$ref": "#/components/schemas/Favorite"
           },
           "pets": {
-              "$ref": "#/components/schemas/PetsResponse"
-            }
+            "$ref": "#/components/schemas/PetsResponse"
+          }
         },
         "example": {
           "id": "645624fbd1c0ebc66ccdb00a",
@@ -927,61 +930,57 @@
         }
       },
       "UpdateResponse": {
-          "type": "object",
-          "properties": {
-            "type": "object",
-            "properties": {
-              "_id": {
-                "type": "string"
-              },
-              "passwordHash": {
-                "type": "string"
-              },
-              "email": {
-                "type": "string",
-                "format": "email"
-              },
-              "name": {
-                "type": "string"
-              },
-              "birthday": {
-                "type": "string",
-                "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
-              },
-              "phone": {
-                "type": "string",
-                "pattern": "^(/^\\+380\\d{9}$/)$"
-              },
-              "city": {
-                "type": "string",
-                "pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$",
-                "example": "Lviv"
-              },
-              "image": {
-                "type": "string",
-                "format": "binary"
-              },
-              "favorite": [],
-              "pets": [],
-              "sessionKey": {
-                "type": "string"
-              }
-            }
-        },
-        "example": 
-          {
-            "_id": "645624fbd1c0ebc66ccdb00a",
-            "passwordHash": "$2b$10$6ntmCd7hryZFRxEcm5Vuru2nDDSNGKGwEA3LXr0OQW7bOxIfCV/iq",
-            "name": "Name",
-            "email": "heyekep@soombo.com",
-            "birthday": "11.11.1131",
-            "phone": "+380000000000",
-            "city": "Sumny",
-            "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
-            "favorite": [],
-            "pets": [],
-            "sessionKey": "5037cd19-9d58-4844-b413-ff237c100a45"
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "passwordHash": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "name": {
+            "type": "string"
+          },
+          "birthday": {
+            "type": "string",
+            "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+          },
+          "phone": {
+            "type": "string",
+            "pattern": "^(/^\\+380\\d{9}$/)$"
+          },
+          "city": {
+            "type": "string",
+            "pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$",
+            "example": "Lviv"
+          },
+          "image": {
+            "type": "string",
+            "format": "binary"
+          },
+          "favorite": [],
+          "pets": [],
+          "sessionKey": {
+            "type": "string"
           }
+        },
+        "example": {
+          "_id": "645624fbd1c0ebc66ccdb00a",
+          "passwordHash": "$2b$10$6ntmCd7hryZFRxEcm5Vuru2nDDSNGKGwEA3LXr0OQW7bOxIfCV/iq",
+          "name": "Name",
+          "email": "heyekep@soombo.com",
+          "birthday": "11.11.1131",
+          "phone": "+380000000000",
+          "city": "Sumny",
+          "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
+          "favorite": [],
+          "pets": [],
+          "sessionKey": "5037cd19-9d58-4844-b413-ff237c100a45"
+        }
       },
       "AvatarRequest": {
         "type": "object",
@@ -1040,44 +1039,42 @@
               },
               "favorite": {
                 "$ref": "#/components/schemas/Favorite"
-                },
+              },
               "pets": [],
               "notices": []
             }
           }
         },
-        "example": 
-          {
-            "user": {
-              "id": "645624fbd1c0ebc66ccdb00a",
-              "email": "heyekep@soombo.com",
-              "name": "Name",
-              "birthday": "11.11.1131",
-              "phone": "+380000000000",
-              "city": "Sumny",
-              "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
-              "favorite": [
-                {
-                  "_id": "6454eb3f52f8c3f6336741b2",
-                  "title": "Exotic bird",
-                  "name": "Rainbow",
-                  "birthday": "01.01.2019",
-                  "breed": "Macaw",
-                  "location": "Miami",
-                  "sex": "male",
-                  "category": "sell",
-                  "price": "3000$",
-                  "email": "user4@net.com",
-                  "phone": "+380661234567",
-                  "comments": "He loves to mimic sounds and is very intelligent!",
-                  "image": "https://source.unsplash.com/random?animals&cat&dog"
+        "example": {
+          "user": {
+            "id": "645624fbd1c0ebc66ccdb00a",
+            "email": "heyekep@soombo.com",
+            "name": "Name",
+            "birthday": "11.11.1131",
+            "phone": "+380000000000",
+            "city": "Sumny",
+            "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
+            "favorite": [
+              {
+                "_id": "6454eb3f52f8c3f6336741b2",
+                "title": "Exotic bird",
+                "name": "Rainbow",
+                "birthday": "01.01.2019",
+                "breed": "Macaw",
+                "location": "Miami",
+                "sex": "male",
+                "category": "sell",
+                "price": "3000$",
+                "email": "user4@net.com",
+                "phone": "+380661234567",
+                "comments": "He loves to mimic sounds and is very intelligent!",
+                "image": "https://source.unsplash.com/random?animals&cat&dog"
               }
-              ],
-              "pets": [],
-              "notices": []
-            }
+            ],
+            "pets": [],
+            "notices": []
           }
-        
+        }
       },
       "AddFavoriteResponse": {
         "type": "object",
@@ -1115,9 +1112,9 @@
                 "type": "string",
                 "format": "binary"
               },
-              "favorite":{
-                  "$ref": "#/components/schemas/Favorite"
-                },
+              "favorite": {
+                "$ref": "#/components/schemas/Favorite"
+              },
               "pets": [],
               "sessionKey": {
                 "type": "string"
@@ -1203,30 +1200,86 @@
             }
           }
         },
-        "example": 
-          {
-            "user": {
-              "_id": "645624fbd1c0ebc66ccdb00a",
-              "passwordHash": "$2b$10$6ntmCd7hryZFRxEcm5Vuru2nDDSNGKGwEA3LXr0OQW7bOxIfCV/iq",
-              "name": "Name",
-              "email": "heyekep@soombo.com",
-              "birthday": "00.00.0000",
-              "phone": "+380000000000",
-              "city": "City",
-              "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
-              "favorite": [],
-              "pets": [],
-              "sessionKey": "598e9cae-19d4-4503-8924-276912e42b6f"
-            }
+        "example": {
+          "user": {
+            "_id": "645624fbd1c0ebc66ccdb00a",
+            "passwordHash": "$2b$10$6ntmCd7hryZFRxEcm5Vuru2nDDSNGKGwEA3LXr0OQW7bOxIfCV/iq",
+            "name": "Name",
+            "email": "heyekep@soombo.com",
+            "birthday": "00.00.0000",
+            "phone": "+380000000000",
+            "city": "City",
+            "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
+            "favorite": [],
+            "pets": [],
+            "sessionKey": "598e9cae-19d4-4503-8924-276912e42b6f"
           }
+        }
       },
       "NoticesRequest": {
         "type": "object",
-        "required": ["category"],
+        "required": [
+          "title",
+          "name",
+          "birthday",
+          "breed",
+          "sex",
+          "location",
+          "category",
+          "email",
+          "phone",
+          "image"
+        ],
         "properties": {
+          "title": {
+            "type": "string",
+            "minLength": "2",
+            "maxLength": "16"
+          },
+          "name": {
+            "type": "string",
+            "minLength": "2",
+            "maxLength": "16"
+          },
+          "birthday": {
+            "type": "string",
+            "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+          },
+          "breed": {
+            "type": "string",
+            "minLength": "2",
+            "maxLength": "16"
+          },
+          "sex": {
+            "type": "string",
+            "example": "male or female"
+          },
+          "location": {
+            "type": "string",
+            "pattern": "^(/^[A-Za-z ]+$/)$",
+            "minLength": "2",
+            "maxLength": "50"
+          },
           "category": {
             "type": "string",
             "enum": ["sell", "lost-found", "for-free"]
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phone": {
+            "type": "string",
+            "pattern": "^(/^\\+380\\d{9}$/)$"
+          },
+          "comments": {
+            "type": "string",
+            "minLength": "8",
+            "maxLength": "120"
+          },
+          "image": {
+            "type": "string",
+            "format": "binary"
           }
         }
       },
@@ -1251,13 +1304,14 @@
           },
           "sex": {
             "type": "string",
-            "example": "male or female"
+            "enum": ["male", "female"]
           },
           "location": {
             "type": "string"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "enum": ["sell", "lost-found", "for-free"]
           },
           "email": {
             "type": "string",
@@ -1275,22 +1329,20 @@
             "format": "binary"
           }
         },
-        "example": [
-          {
-            "_id": "6454eb3f52f8c3f6336741b8",
-            "title": "Friendly cat",
-            "name": "Socks",
-            "birthday": "15.03.2019",
-            "breed": "Domestic Shorthair",
-            "location": "New York",
-            "sex": "male",
-            "category": "lost-found",
-            "email": "jane@net.com",
-            "phone": "+14155552678",
-            "comments": "Socks is very social and loves to play!",
-            "image": "https://source.unsplash.com/random?animals&cat&dog"
-          }
-        ]
+        "example": {
+          "_id": "6454eb3f52f8c3f6336741b8",
+          "title": "Friendly cat",
+          "name": "Socks",
+          "birthday": "15.03.2019",
+          "breed": "Domestic Shorthair",
+          "location": "New York",
+          "sex": "male",
+          "category": "lost-found",
+          "email": "jane@net.com",
+          "phone": "+14155552678",
+          "comments": "Socks is very social and loves to play!",
+          "image": "https://source.unsplash.com/random?animals&cat&dog"
+        }
       },
       "FindeTitleResponse": {
         "type": "array",
@@ -1315,8 +1367,7 @@
             },
             "sex": {
               "type": "string",
-              "enum": ["male ", "female"],
-              "example": "male or female"
+              "enum": ["male ", "female"]
             },
             "location": {
               "type": "string"
@@ -1386,7 +1437,7 @@
           },
           "sex": {
             "type": "string",
-            "example": "male or female"
+            "enum": ["male ", "female"]
           },
           "location": {
             "type": "string",
@@ -1396,7 +1447,7 @@
           },
           "category": {
             "type": "string",
-            "example": "sell, lost-found, for-free"
+            "enum": ["sell", "lost-found", "for-free"]
           },
           "email": {
             "type": "string",
@@ -1442,17 +1493,9 @@
         "items": {
           "type": "object",
           "properties": {
-            "workDays": [
-              {
-                "isOpen": true,
-                "from": {
-                  "type": "number"
-                },
-                "to": {
-                  "type": "number"
-                }
-              }
-            ],
+            "workDays": {
+              "$ref": "#/components/schemas/WorkDays"
+            },
             "_id": {
               "type": "string"
             },
@@ -1687,7 +1730,7 @@
           },
           "sex": {
             "type": "string",
-            "example": "male or female"
+            "enum": ["male", "female"]
           },
           "location": {
             "type": "string",
@@ -1697,7 +1740,7 @@
           },
           "category": {
             "type": "string",
-            "example": "sell, lost-found, for-free"
+            "enum": ["sell", "lost-found", "for-free"]
           },
           "email": {
             "type": "string",
@@ -1746,6 +1789,21 @@
           "image": {
             "type": "string",
             "format": "binary"
+          }
+        }
+      },
+      "WorkDays": {
+        "type": "object",
+        "properties": {
+          "isOpen": {
+            "type": "boolean",
+            "default": true
+          },
+          "from": {
+            "type": "number"
+          },
+          "to": {
+            "type": "number"
           }
         }
       }
