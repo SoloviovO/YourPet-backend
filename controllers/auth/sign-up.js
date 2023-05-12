@@ -8,12 +8,18 @@ const signUp = async (req, res, next) => {
 
   const { error } = addUserSchema.validate({ email, password });
   if (error) {
-    throw createHttpException(400, error.message);
+    const invalidField = error.details[0].path[0];
+    throw createHttpException(
+      400,
+      `Missing or not valid field ${invalidField} => ${error.message}`
+    );
   }
+
   const user = await UserModel.findOne({ email });
   if (user) {
     throw createHttpException(409, "Email in use");
   }
+
   const passwordHash = await createHash(password);
   const image = gravatar.url(email);
 
@@ -25,6 +31,7 @@ const signUp = async (req, res, next) => {
 
   res.status(201).json({
     user: {
+      id: newUser._id,
       email: newUser.email,
       name: newUser.name,
       birthday: newUser.birthday,

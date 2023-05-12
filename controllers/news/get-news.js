@@ -7,6 +7,7 @@ const news = async (req, res, next) => {
     skip: (page - 1) * limit,
     limit: limit,
   });
+
   res.json(news);
 };
 

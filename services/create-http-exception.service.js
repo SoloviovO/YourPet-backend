@@ -9,6 +9,7 @@ const errorMessageList = {
 const createHttpException = (code, message = errorMessageList[code]) => {
   const err = new Error(message);
   err.code = code;
+
   return err;
 };
 

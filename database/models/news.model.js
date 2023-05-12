@@ -4,17 +4,18 @@ const newsSchema = mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, "Set title for new"],
+    },
+    text: {
+      type: String,
     },
     url: {
       type: String,
     },
-    description: {
+    imgUrl: {
       type: String,
     },
     date: {
       type: String,
-      default: null,
     },
   },
   {
