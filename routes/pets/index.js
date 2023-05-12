@@ -14,6 +14,10 @@ router.post(
   controllerWrapper(petsController.addUserPet)
 );
 
-router.delete("/:id", controllerWrapper(petsController.deleteUserPet));
+router.delete(
+  "/:id",
+  userAuthMiddleware,
+  controllerWrapper(petsController.deleteUserPet)
+);
 
 module.exports = router;
