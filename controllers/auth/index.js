@@ -1,3 +1,4 @@
+const { googleAuth } = require("./google-auth");
 const { logout } = require("./logout");
 const { refresh } = require("./refresh");
 const { signIn } = require("./sign-in");
@@ -8,4 +9,5 @@ module.exports = {
   signIn,
   logout,
   refresh,
+  googleAuth,
 };
