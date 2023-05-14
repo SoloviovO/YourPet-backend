@@ -24,10 +24,9 @@ const getFavoriteNotices = async (req, res, next) => {
     image: user.image,
     favorite: user.favorite,
     favorite: favoriteNotices,
-    total: result.favorite.length,
   };
 
-  res.json({ user: match });
+  res.json({ user: match, total: result.favorite.length });
 };
 
 module.exports = {
