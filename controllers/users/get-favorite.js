@@ -22,7 +22,6 @@ const getFavoriteNotices = async (req, res, next) => {
     phone: user.phone,
     city: user.city,
     image: user.image,
-    favorite: user.favorite,
     favorite: favoriteNotices,
   };
 
