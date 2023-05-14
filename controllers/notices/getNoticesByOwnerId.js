@@ -6,11 +6,12 @@ const getNoticesByOwnerId = async (req, res) => {
 
   const skip = (page - 1) * limit;
 
+  const noticesAll = await NoticesModel.find({ owner: _id });
   const notices = await NoticesModel.find({ owner: _id })
     .skip(skip)
     .limit(limit);
 
-  res.json(notices);
+  res.json({ notices, total: noticesAll.length });
 };
 
 module.exports = {
