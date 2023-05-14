@@ -23,9 +23,8 @@ const getFavoriteNotices = async (req, res, next) => {
     city: user.city,
     image: user.image,
     favorite: user.favorite,
-    pets: user.pets,
-    notices: user.notices,
     favorite: favoriteNotices,
+    total: result.favorite.length,
   };
 
   res.json({ user: match });

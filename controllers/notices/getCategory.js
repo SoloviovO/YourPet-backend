@@ -4,7 +4,7 @@ const { getCategorySchema } =
   require("../../schemas/notice.schema").noticeSchemas;
 
 const getCategory = async (req, res) => {
-  const { page = 1, limit = 5, category } = req.query;
+  const { page, limit, category } = req.query;
 
   const skip = (page - 1) * limit;
 
@@ -16,13 +16,16 @@ const getCategory = async (req, res) => {
     });
   }
 
+  const noticesAll = await NoticesModel.find({
+    category: category ? category : "sell",
+  });
   const notices = await NoticesModel.find({
     category: category ? category : "sell",
   })
     .skip(skip)
     .limit(limit);
 
-  res.json(notices);
+  res.json({ notices, total: noticesAll.length });
 };
 
 module.exports = {

@@ -11,6 +11,7 @@ const getNoticesByTitle = async (req, res) => {
   }
 
   const regex = new RegExp(title, "i");
+  const resultAll = await NoticesModel.find({ title: regex, category });
   const result = await NoticesModel.find({ title: regex, category })
     .skip(skip)
     .limit(limit);
@@ -19,7 +20,7 @@ const getNoticesByTitle = async (req, res) => {
     throw createHttpException(404, "Not found");
   }
 
-  res.json(result);
+  res.json({ notices: result, total: resultAll.length });
 };
 
 module.exports = { getNoticesByTitle };

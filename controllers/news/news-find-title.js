@@ -9,16 +9,18 @@ const getNewsByTitle = async (req, res) => {
   }
 
   const regex = new RegExp(title, "i");
-  const result = await NewsModel.find({ title: regex }, null, {
+  const resultAll = await NewsModel.find({ title: regex });
+
+  const news = await NewsModel.find({ title: regex }, null, {
     skip: (page - 1) * limit,
     limit: limit,
   });
 
-  if (result.length === 0) {
+  if (news.length === 0) {
     throw createHttpException(404, "No results for your request");
   }
 
-  res.json(result);
+  res.json({ news, total: resultAll.length });
 };
 
 module.exports = { getNewsByTitle };
