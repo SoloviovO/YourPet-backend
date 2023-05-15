@@ -1,8 +1,9 @@
 const { NoticesModel } = require("../../database/models");
 const { createHttpException } = require("../../services");
 
-const getNoticesByTitle = async (req, res) => {
-  const { title, category, page, limit } = req.query;
+const getOwnNoticesByTitle = async (req, res) => {
+  const { title, page, limit } = req.query;
+  const { _id } = req.user;
 
   const skip = (page - 1) * limit;
 
@@ -11,8 +12,8 @@ const getNoticesByTitle = async (req, res) => {
   }
 
   const regex = new RegExp(title, "i");
-  const resultAll = await NoticesModel.find({ title: regex, category });
-  const result = await NoticesModel.find({ title: regex, category })
+  const resultAll = await NoticesModel.find({ title: regex, owner: _id });
+  const result = await NoticesModel.find({ title: regex, owner: _id })
     .skip(skip)
     .limit(limit);
 
@@ -23,4 +24,4 @@ const getNoticesByTitle = async (req, res) => {
   res.json({ notices: result, total: resultAll.length });
 };
 
-module.exports = { getNoticesByTitle };
+module.exports = { getOwnNoticesByTitle };

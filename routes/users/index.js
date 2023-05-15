@@ -1,7 +1,7 @@
 const express = require("express");
 const authController = require("../../controllers/users");
 const { controllerWrapper } = require("../../services");
-const { userAuthMiddleware, uploadCloud } = require("../../middlewares");
+const { userAuthMiddleware, handleUpload } = require("../../middlewares");
 
 const router = express.Router();
 
@@ -19,8 +19,8 @@ router.patch(
 
 router.patch(
   "/avatars",
+  handleUpload,
   userAuthMiddleware,
-  uploadCloud.single("avatar"),
   controllerWrapper(authController.updateCloudAvatars)
 );
 

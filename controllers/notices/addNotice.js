@@ -1,5 +1,3 @@
-const cloudinary = require("cloudinary").v2;
-
 const { NoticesModel } = require("../../database/models/notices.model");
 
 const { addNoticeSchema } =
@@ -35,10 +33,11 @@ const addNotice = async (req, res) => {
 
   if (error) {
     const invalidField = error.details[0].path[0];
-    throw createHttpException(400, `missing required ${invalidField} field`);
+    throw createHttpException(
+      400,
+      `Missing or not valid field ${invalidField} => ${error.message}`
+    );
   }
-
-  // const result = await cloudinary.uploader.upload(req.file.path);
 
   const newNotice = await NoticesModel.create({
     category,
@@ -50,7 +49,6 @@ const addNotice = async (req, res) => {
     location,
     price,
     comments,
-    // image: result.secure_url,
     image: req.file.path,
     owner: user._id,
     email: user.email,

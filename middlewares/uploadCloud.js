@@ -20,7 +20,6 @@ const storage = new CloudinaryStorage({
   },
 });
 
-// const uploadCloud = multer({ storage, limits: { fileSize: 3000000 } });
 const uploadCloud = multer({
   storage,
   limits: { fileSize: 3000000 },
@@ -33,8 +32,25 @@ const uploadCloud = multer({
     }
     cb(null, true);
   },
-});
+}).single("avatar");
+
+const handleUpload = (req, res, next) => {
+  uploadCloud(req, res, (err) => {
+    if (err) {
+      if (err.code === "LIMIT_FILE_SIZE") {
+        return res.status(400).json({ error: "File size limit exceeded" });
+      }
+      return res.status(400).json({ error: err.message });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: "File not provided" });
+    }
+    next();
+  });
+};
 
 module.exports = {
   uploadCloud,
+  handleUpload,
 };

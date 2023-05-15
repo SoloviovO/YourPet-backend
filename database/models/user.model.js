@@ -41,10 +41,6 @@ const userSchema = mongoose.Schema(
         ref: "notices",
       },
     ],
-    // favorite: {
-    //   type: Array,
-    //   default: [],
-    // },
     pets: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "pets",

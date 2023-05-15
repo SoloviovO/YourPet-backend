@@ -2,31 +2,42 @@ const express = require("express");
 
 const noticesController = require("../../controllers/notices");
 
-const { schemas } = require("../../schemas/notice.schema");
-
-const {
-  userAuthMiddleware,
-  upload,
-  uploadCloud,
-} = require("../../middlewares");
+const { userAuthMiddleware, handleUpload } = require("../../middlewares");
 const { controllerWrapper } = require("../../services");
 
 const router = express.Router();
 
 router.get("/", noticesController.getCategory);
+
 router.get("/find", controllerWrapper(noticesController.getNoticesByTitle));
+
+router.get(
+  "/owner",
+  userAuthMiddleware,
+  controllerWrapper(noticesController.getOwnNoticesByTitle)
+);
+
+router.get(
+  "/favorite",
+  userAuthMiddleware,
+  controllerWrapper(noticesController.getFavoriteNoticesByTitle)
+);
+
 router.get(
   "/user",
   userAuthMiddleware,
   controllerWrapper(noticesController.getNoticesByOwnerId)
 );
+
 router.get("/:id", controllerWrapper(noticesController.getOneNotice));
+
 router.post(
   "/",
-  uploadCloud.single("avatar"),
+  handleUpload,
   userAuthMiddleware,
   controllerWrapper(noticesController.addNotice)
 );
+
 router.delete(
   "/:id",
   userAuthMiddleware,

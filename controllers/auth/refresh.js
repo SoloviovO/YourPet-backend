@@ -12,7 +12,11 @@ const refresh = async (req, res, next) => {
 
   const { error } = refreshSchema.validate({ refreshToken });
   if (error) {
-    throw createHttpException(400, error.message);
+    const invalidField = error.details[0].path[0];
+    throw createHttpException(
+      400,
+      `Missing or not valid field ${invalidField} => ${error.message} `
+    );
   }
 
   const tokenPayload = veryfyRefresh(refreshToken);

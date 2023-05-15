@@ -14,7 +14,11 @@ const updateUserInfo = async (req, res, next) => {
     city,
   });
   if (error) {
-    throw createHttpException(400, error.message);
+    const invalidField = error.details[0].path[0];
+    throw createHttpException(
+      400,
+      `Missing or not valid field ${invalidField} => ${error.message}`
+    );
   }
 
   const result = await UserModel.findByIdAndUpdate(
@@ -30,6 +34,7 @@ const updateUserInfo = async (req, res, next) => {
   ).catch((error) => {
     throw createHttpException(400, error.message);
   });
+
   if (result === null) {
     throw createHttpException(404, "Not found");
   }

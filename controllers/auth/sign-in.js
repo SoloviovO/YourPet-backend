@@ -10,9 +10,14 @@ const { addUserSchema } = require("../../schemas");
 
 const signIn = async (req, res, next) => {
   const { email, password } = req.body;
+
   const { error } = addUserSchema.validate({ email, password });
   if (error) {
-    throw createHttpException(400, error.message);
+    const invalidField = error.details[0].path[0];
+    throw createHttpException(
+      400,
+      `Missing or not valid field ${invalidField} => ${error.message}`
+    );
   }
 
   const user = await UserModel.findOne({ email });
