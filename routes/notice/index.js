@@ -12,6 +12,18 @@ router.get("/", noticesController.getCategory);
 router.get("/find", controllerWrapper(noticesController.getNoticesByTitle));
 
 router.get(
+  "/owner",
+  userAuthMiddleware,
+  controllerWrapper(noticesController.getOwnNoticesByTitle)
+);
+
+router.get(
+  "/favorite",
+  userAuthMiddleware,
+  controllerWrapper(noticesController.getFavoriteNoticesByTitle)
+);
+
+router.get(
   "/user",
   userAuthMiddleware,
   controllerWrapper(noticesController.getNoticesByOwnerId)
