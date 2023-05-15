@@ -2,7 +2,7 @@ const express = require("express");
 
 const noticesController = require("../../controllers/notices");
 
-const { userAuthMiddleware, uploadCloud } = require("../../middlewares");
+const { userAuthMiddleware, handleUpload } = require("../../middlewares");
 const { controllerWrapper } = require("../../services");
 
 const router = express.Router();
@@ -33,7 +33,7 @@ router.get("/:id", controllerWrapper(noticesController.getOneNotice));
 
 router.post(
   "/",
-  uploadCloud.single("avatar"),
+  handleUpload,
   userAuthMiddleware,
   controllerWrapper(noticesController.addNotice)
 );

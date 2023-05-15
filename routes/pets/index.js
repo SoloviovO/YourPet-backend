@@ -2,15 +2,15 @@ const express = require("express");
 
 const petsController = require("../../controllers/pets");
 
-const { userAuthMiddleware, uploadCloud } = require("../../middlewares");
+const { userAuthMiddleware, handleUpload } = require("../../middlewares");
 const { controllerWrapper } = require("../../services");
 
 const router = express.Router();
 
 router.post(
   "/",
+  handleUpload,
   userAuthMiddleware,
-  uploadCloud.single("avatar"),
   controllerWrapper(petsController.addUserPet)
 );
 
