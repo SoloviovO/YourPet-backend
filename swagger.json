@@ -1,14 +1,15 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.13",
-
+    "version": "1.0.14",
     "title": "Swagger YourPet",
     "description": "This is the server of the YourPet website."
   },
-  "consumes": ["appliation/json", "multipart/form-data"],
-  "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:3000/api" }],
+  "servers": [
+    {
+      "url": "http://localhost:3000/api"
+    }
+  ],
   "tags": [
     {
       "name": "Auth",
@@ -35,13 +36,13 @@
       "description": "Pets endpoints"
     }
   ],
-
   "paths": {
     "/auth/register": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Registration",
-
         "requestBody": {
           "required": true,
           "content": {
@@ -54,6 +55,7 @@
         },
         "responses": {
           "201": {
+            "description": "Registration endpoints",
             "content": {
               "application/json": {
                 "schema": {
@@ -73,9 +75,10 @@
     },
     "/auth/login": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Login",
-
         "requestBody": {
           "description": "Login's object",
           "required": true,
@@ -89,6 +92,7 @@
         },
         "responses": {
           "200": {
+            "description": "Returns a user object + token + refreshToken",
             "content": {
               "application/json": {
                 "schema": {
@@ -100,10 +104,10 @@
           "400": {
             "description": "Validation error"
           },
-          "404": {
+          "401": {
             "description": "Email or password is wrong"
           },
-          "401": {
+          "404": {
             "description": "Email or password is wrong"
           }
         }
@@ -111,9 +115,15 @@
     },
     "/auth/refresh": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Refresh token",
-        "security": [{ "Bearer": [] }],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "requestBody": {
           "description": "Refresh token",
           "required": true,
@@ -127,6 +137,7 @@
         },
         "responses": {
           "200": {
+            "description": "Returns token + refreshToken",
             "content": {
               "application/json": {
                 "schema": {
@@ -135,7 +146,6 @@
               }
             }
           },
-
           "403": {
             "description": "Token invalid",
             "content": {}
@@ -145,10 +155,15 @@
     },
     "/auth/logout": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Logout",
-        "security": [{ "Bearer": [] }],
-
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "responses": {
           "204": {
             "description": "Deleted successfully"
@@ -158,11 +173,18 @@
     },
     "/user/current": {
       "get": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "summary": "User current",
-        "security": [{ "Bearer": [] }],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "responses": {
           "200": {
+            "description": "Returns information about the User",
             "content": {
               "application/json": {
                 "schema": {
@@ -176,9 +198,15 @@
     },
     "/user/update": {
       "patch": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "summary": "UpdateUserInfo",
-        "security": [{ "Bearer": [] }],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "requestBody": {
           "description": "Specify one of the :",
           "required": true,
@@ -192,6 +220,7 @@
         },
         "responses": {
           "200": {
+            "description": "Change of information about the user",
             "content": {
               "application/json": {
                 "schema": {
@@ -211,9 +240,15 @@
     },
     "/user/avatars": {
       "patch": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "summary": "Avatar",
-        "security": [{ "Bearer": [] }],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "requestBody": {
           "description": "UserInfo object",
           "required": true,
@@ -227,6 +262,7 @@
         },
         "responses": {
           "200": {
+            "description": "Change the avatar on the user page",
             "content": {
               "appliation/json": {
                 "schema": {
@@ -240,7 +276,9 @@
     },
     "/user/favorite": {
       "get": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "summary": "Favorite",
         "parameters": [
           {
@@ -258,9 +296,14 @@
             }
           }
         ],
-        "security": [{ "Bearer": [] }],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "responses": {
           "200": {
+            "description": "Get favorite notices",
             "content": {
               "application/json": {
                 "schema": {
@@ -274,11 +317,28 @@
     },
     "/user/favorite/{id}": {
       "post": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "summary": "Add Favorite",
-        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "responses": {
           "201": {
+            "description": "Add notices to  favorite",
             "content": {
               "application/json": {
                 "schema": {
@@ -296,12 +356,28 @@
         }
       },
       "delete": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "summary": "Delete Favorite",
-        "parameters": [],
-        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "responses": {
           "200": {
+            "description": "Delete notices to  favorite",
             "content": {
               "application/json": {
                 "schema": {
@@ -319,7 +395,9 @@
     },
     "/notices": {
       "get": {
-        "tags": ["Notices"],
+        "tags": [
+          "Notices"
+        ],
         "summary": "Get notices by category",
         "parameters": [
           {
@@ -327,7 +405,11 @@
             "name": "category",
             "schema": {
               "type": "string",
-              "enum": ["sell", "lost-found", "for-free"]
+              "enum": [
+                "sell",
+                "lost-found",
+                "for-free"
+              ]
             },
             "required": true
           },
@@ -348,6 +430,7 @@
         ],
         "responses": {
           "200": {
+            "description": "Get notices by category",
             "content": {
               "application/json": {
                 "schema": {
@@ -362,9 +445,10 @@
         }
       },
       "post": {
-        "tags": ["Notices"],
-        "summary": "Ads notices to the selected category",
-
+        "tags": [
+          "Notices"
+        ],
+        "summary": "Adds notices to the selected category",
         "requestBody": {
           "required": true,
           "content": {
@@ -377,6 +461,7 @@
         },
         "responses": {
           "200": {
+            "description": "Added an ad to the category",
             "content": {
               "application/json": {
                 "schema": {
@@ -393,26 +478,32 @@
     },
     "/notices/find": {
       "get": {
-        "tags": ["Notices"],
+        "tags": [
+          "Notices"
+        ],
         "summary": "Find notice by title",
         "parameters": [
           {
             "in": "query",
             "name": "title",
             "schema": {
-              "type": "string",
-              "minLength": "2",
-              "maxLength": "16"
+              "type": "integer",
+              "minLength": 2,
+              "maxLength": 16
             },
             "description": "The value is assigned to the title",
-            "required": [true, "Set title for new"]
+            "required": true
           },
           {
             "in": "query",
             "name": "category",
             "schema": {
               "type": "string",
-              "enum": ["sell", "lost-found", "for-free"]
+              "enum": [
+                "sell",
+                "lost-found",
+                "for-free"
+              ]
             },
             "required": true
           },
@@ -431,9 +522,9 @@
             }
           }
         ],
-
         "responses": {
           "200": {
+            "description": "Find notice by title and category",
             "content": {
               "application/json": {
                 "schema": {
@@ -450,12 +541,18 @@
     },
     "/notices/user": {
       "get": {
-        "tags": ["Notices"],
+        "tags": [
+          "Notices"
+        ],
         "summary": "Notices by authorized user",
-        "security": [{ "Bearer": [] }],
-
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "responses": {
           "200": {
+            "description": "Return notices by authorized user",
             "content": {
               "application/json": {
                 "schema": {
@@ -469,7 +566,9 @@
     },
     "/notices/{id}": {
       "get": {
-        "tags": ["Notices"],
+        "tags": [
+          "Notices"
+        ],
         "summary": "Get full info about notice",
         "parameters": [
           {
@@ -481,10 +580,14 @@
             "required": true
           }
         ],
-        "security": [{ "Bearer": [] }],
-
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "responses": {
           "200": {
+            "description": "Return full info about notice",
             "content": {
               "application/json": {
                 "schema": {
@@ -499,20 +602,25 @@
         }
       },
       "delete": {
-        "tags": ["Notices"],
+        "tags": [
+          "Notices"
+        ],
         "summary": "Delete notice by authorized user",
         "parameters": [
           {
             "in": "path",
-            "name": "_id",
+            "name": "id",
             "schema": {
               "type": "string"
             },
             "required": true
           }
         ],
-        "security": [{ "Bearer": [] }],
-
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Delete success"
@@ -525,11 +633,13 @@
     },
     "/friends": {
       "get": {
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "summary": "Get friends or sponsor",
-
         "responses": {
           "200": {
+            "description": "Return friends or sponsor",
             "content": {
               "application/json": {
                 "schema": {
@@ -543,7 +653,9 @@
     },
     "/news": {
       "get": {
-        "tags": ["News"],
+        "tags": [
+          "News"
+        ],
         "summary": "Get news",
         "parameters": [
           {
@@ -561,9 +673,9 @@
             }
           }
         ],
-
         "responses": {
           "200": {
+            "description": "Return news",
             "content": {
               "application/json": {
                 "schema": {
@@ -577,18 +689,21 @@
     },
     "/news/title": {
       "get": {
-        "tags": ["News"],
+        "tags": [
+          "News"
+        ],
         "summary": "Found news by title",
         "parameters": [
           {
             "in": "query",
             "name": "title",
             "schema": {
-              "type": "string",
-              "minLength": "2",
-              "maxLength": "16"
+              "type": "integer",
+              "minLength": 2,
+              "maxLength": 16
             },
-            "required": [true, "Set title for new"]
+            "required": true,
+            "description": "Set title for new"
           },
           {
             "in": "query",
@@ -605,9 +720,9 @@
             }
           }
         ],
-
         "responses": {
           "200": {
+            "description": "Return news by title",
             "content": {
               "application/json": {
                 "schema": {
@@ -627,10 +742,15 @@
     },
     "/pets": {
       "post": {
-        "tags": ["Pets"],
+        "tags": [
+          "Pets"
+        ],
         "summary": "Add your pet",
-        "security": [{ "Bearer": [] }],
-
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -643,6 +763,7 @@
         },
         "responses": {
           "201": {
+            "description": "Return add pet",
             "content": {
               "application/json": {
                 "schema": {
@@ -659,7 +780,9 @@
     },
     "/pets/{id}": {
       "delete": {
-        "tags": ["Pets"],
+        "tags": [
+          "Pets"
+        ],
         "summary": "Delete pet by authorized user",
         "parameters": [
           {
@@ -671,8 +794,11 @@
             "required": true
           }
         ],
-        "security": [{ "Bearer": [] }],
-
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Pet deleted"
@@ -684,21 +810,23 @@
       }
     }
   },
-
   "components": {
     "schemas": {
       "RegistrationRequest": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": [
+          "email",
+          "password"
+        ],
         "properties": {
           "email": {
             "type": "string",
             "format": "email"
           },
           "password": {
-            "type": "string",
-            "minLength": "6",
-            "maxLength": "16",
+            "type": "integer",
+            "minLength": 6,
+            "maxLength": 16,
             "pattern": " ^ ^ (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,16}) $",
             "example": "qWerty123"
           }
@@ -748,16 +876,19 @@
       },
       "LoginRequest": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": [
+          "email",
+          "password"
+        ],
         "properties": {
           "email": {
             "type": "string",
             "format": "email"
           },
           "password": {
-            "type": "string",
-            "minLength": "6",
-            "maxLength": "16",
+            "type": "integer",
+            "minLength": 6,
+            "maxLength": 16,
             "pattern": " ^ (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,16}) $",
             "example": "qWerty123"
           }
@@ -779,7 +910,6 @@
         "example": {
           "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDRiNmQ5NzU2YjljMzc2OTg0YjE0MDgiLCJzZXNzaW9uS2V5IjoiNGEwZTQ1M2EtN2NiMS00ZTgwLTllMTgtYmU0ZTQ3YzJhYjI1IiwiaWF0IjoxNjgyNjczOTI1LCJleHAiOjE2ODI2NzU3MjV9.nd49ejNfSriW6S3dSDAPfUpscukVtgQvN1fsd9y2uFc",
           "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDU2MjRmYmQxYzBlYmM2NmNjZGIwMGEiLCJzZXNzaW9uS2V5IjoiYzFjMjMzNTYtNWI3Yy00MjFkLWFmNzAtYjM5YjE2OGIxNDk3IiwiaWF0IjoxNjgzNDExMjg0LCJleHAiOjE4NjM0MTEyODR9.0QXD5iPujHoow3aExltvoAO208s5Z5h56pmg8Oj-mno",
-
           "user": {
             "id": "645624fbd1c0ebc66ccdb00a",
             "email": "heyekep@soombo.com",
@@ -793,7 +923,9 @@
       },
       "RefreshRequest": {
         "type": "object",
-        "required": ["refreshToken"],
+        "required": [
+          "refreshToken"
+        ],
         "properties": {
           "refreshToken": {
             "type": "string",
@@ -818,7 +950,9 @@
       },
       "LogoutRequest": {
         "type": "object",
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
           "id": {
             "type": "string",
@@ -904,7 +1038,6 @@
       },
       "UpdateRequest": {
         "type": "object",
-        "enum": ["name", "email", "birthday", "phone", "city"],
         "properties": {
           "email": {
             "type": "string",
@@ -961,8 +1094,8 @@
             "type": "string",
             "format": "binary"
           },
-          "favorite": [],
-          "pets": [],
+          "favorite": {},
+          "pets": {},
           "sessionKey": {
             "type": "string"
           }
@@ -1039,8 +1172,8 @@
               "favorite": {
                 "$ref": "#/components/schemas/Favorite"
               },
-              "pets": [],
-              "notices": []
+              "pets": {},
+              "notices": {}
             }
           }
         },
@@ -1087,7 +1220,6 @@
               "passwordHash": {
                 "type": "string"
               },
-
               "email": {
                 "type": "string",
                 "format": "email"
@@ -1114,7 +1246,7 @@
               "favorite": {
                 "$ref": "#/components/schemas/Favorite"
               },
-              "pets": [],
+              "pets": {},
               "sessionKey": {
                 "type": "string"
               }
@@ -1167,7 +1299,6 @@
               "passwordHash": {
                 "type": "string"
               },
-
               "email": {
                 "type": "string",
                 "format": "email"
@@ -1191,8 +1322,8 @@
                 "type": "string",
                 "format": "binary"
               },
-              "favorite": [],
-              "pets": [],
+              "favorite": {},
+              "pets": {},
               "sessionKey": {
                 "type": "string"
               }
@@ -1231,37 +1362,41 @@
         ],
         "properties": {
           "title": {
-            "type": "string",
-            "minLength": "2",
-            "maxLength": "16"
+            "type": "integer",
+            "minLength": 2,
+            "maxLength": 16
           },
           "name": {
-            "type": "string",
-            "minLength": "2",
-            "maxLength": "16"
+            "type": "integer",
+            "minLength": 2,
+            "maxLength": 16
           },
           "birthday": {
             "type": "string",
             "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
           },
           "breed": {
-            "type": "string",
-            "minLength": "2",
-            "maxLength": "16"
+            "type": "integer",
+            "minLength": 2,
+            "maxLength": 16
           },
           "sex": {
             "type": "string",
             "example": "male or female"
           },
           "location": {
-            "type": "string",
+            "type": "integer",
             "pattern": "^(/^[A-Za-z ]+$/)$",
-            "minLength": "2",
-            "maxLength": "50"
+            "minLength": 2,
+            "maxLength": 50
           },
           "category": {
             "type": "string",
-            "enum": ["sell", "lost-found", "for-free"]
+            "enum": [
+              "sell",
+              "lost-found",
+              "for-free"
+            ]
           },
           "email": {
             "type": "string",
@@ -1272,9 +1407,9 @@
             "pattern": "^(/^\\+380\\d{9}$/)$"
           },
           "comments": {
-            "type": "string",
-            "minLength": "8",
-            "maxLength": "120"
+            "type": "integer",
+            "minLength": 8,
+            "maxLength": 120
           },
           "image": {
             "type": "string",
@@ -1303,14 +1438,21 @@
           },
           "sex": {
             "type": "string",
-            "enum": ["male", "female"]
+            "enum": [
+              "male",
+              "female"
+            ]
           },
           "location": {
             "type": "string"
           },
           "category": {
             "type": "string",
-            "enum": ["sell", "lost-found", "for-free"]
+            "enum": [
+              "sell",
+              "lost-found",
+              "for-free"
+            ]
           },
           "email": {
             "type": "string",
@@ -1366,7 +1508,10 @@
             },
             "sex": {
               "type": "string",
-              "enum": ["male ", "female"]
+              "enum": [
+                "male ",
+                "female"
+              ]
             },
             "location": {
               "type": "string"
@@ -1416,37 +1561,44 @@
             "type": "string"
           },
           "title": {
-            "type": "string",
-            "minLength": "2",
-            "maxLength": "16"
+            "type": "integer",
+            "minLength": 2,
+            "maxLength": 16
           },
           "name": {
-            "type": "string",
-            "minLength": "2",
-            "maxLength": "16"
+            "type": "integer",
+            "minLength": 2,
+            "maxLength": 16
           },
           "birthday": {
             "type": "string",
             "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
           },
           "breed": {
-            "type": "string",
-            "minLength": "2",
-            "maxLength": "16"
+            "type": "integer",
+            "minLength": 2,
+            "maxLength": 16
           },
           "sex": {
             "type": "string",
-            "enum": ["male ", "female"]
+            "enum": [
+              "male ",
+              "female"
+            ]
           },
           "location": {
-            "type": "string",
+            "type": "integer",
             "pattern": "^(/^[A-Za-z ]+$/)$",
-            "minLength": "2",
-            "maxLength": "50"
+            "minLength": 2,
+            "maxLength": 50
           },
           "category": {
             "type": "string",
-            "enum": ["sell", "lost-found", "for-free"]
+            "enum": [
+              "sell",
+              "lost-found",
+              "for-free"
+            ]
           },
           "email": {
             "type": "string",
@@ -1457,9 +1609,9 @@
             "pattern": "^(/^\\+380\\d{9}$/)$"
           },
           "comments": {
-            "type": "string",
-            "minLength": "8",
-            "maxLength": "120"
+            "type": "integer",
+            "minLength": 8,
+            "maxLength": 120
           },
           "image": {
             "type": "string",
@@ -1555,9 +1707,9 @@
               "type": "string"
             },
             "title": {
-              "type": "string",
-              "minLength": "2",
-              "maxLength": "16"
+              "type": "integer",
+              "minLength": 2,
+              "maxLength": 16
             },
             "url": {
               "type": "string"
@@ -1582,12 +1734,17 @@
       },
       "PetsRequest": {
         "type": "object",
-        "required": ["name", "birthday", "breed", "photoURL"],
+        "required": [
+          "name",
+          "birthday",
+          "breed",
+          "photoURL"
+        ],
         "properties": {
           "name": {
-            "type": "string",
-            "minLength": "2",
-            "maxLength": "16"
+            "type": "integer",
+            "minLength": 2,
+            "maxLength": 16
           },
           "birthday": {
             "type": "string",
@@ -1595,14 +1752,14 @@
             "default": "00.00.0000"
           },
           "breed": {
-            "type": "string",
-            "minLength": "2",
-            "maxLength": "16"
+            "type": "integer",
+            "minLength": 2,
+            "maxLength": 16
           },
           "comments": {
-            "type": "string",
-            "minLength": "8",
-            "maxLength": "120"
+            "type": "integer",
+            "minLength": 8,
+            "maxLength": 120
           },
           "photoURL": {
             "type": "string"
@@ -1613,9 +1770,9 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "minLength": "2",
-            "maxLength": "16"
+            "type": "integer",
+            "minLength": 2,
+            "maxLength": 16
           },
           "birthday": {
             "type": "string",
@@ -1623,17 +1780,17 @@
             "default": "00.00.0000"
           },
           "breed": {
-            "type": "string",
-            "minLength": "2",
-            "maxLength": "16"
+            "type": "integer",
+            "minLength": 2,
+            "maxLength": 16
           },
           "photoURL": {
             "type": "string"
           },
           "comments": {
-            "type": "string",
-            "minLength": "8",
-            "maxLength": "120"
+            "type": "integer",
+            "minLength": 8,
+            "maxLength": 120
           },
           "owner": {
             "type": "string"
@@ -1652,7 +1809,6 @@
           "_id": "6458e0c1e0db665b6175aab2"
         }
       },
-
       "Favorite": {
         "type": "object",
         "properties": {
@@ -1709,37 +1865,44 @@
             "type": "string"
           },
           "title": {
-            "type": "string",
-            "minLength": "2",
-            "maxLength": "16"
+            "type": "integer",
+            "minLength": 2,
+            "maxLength": 16
           },
           "name": {
-            "type": "string",
-            "minLength": "2",
-            "maxLength": "16"
+            "type": "integer",
+            "minLength": 2,
+            "maxLength": 16
           },
           "birthday": {
             "type": "string",
             "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
           },
           "breed": {
-            "type": "string",
-            "minLength": "2",
-            "maxLength": "16"
+            "type": "integer",
+            "minLength": 2,
+            "maxLength": 16
           },
           "sex": {
             "type": "string",
-            "enum": ["male", "female"]
+            "enum": [
+              "male",
+              "female"
+            ]
           },
           "location": {
-            "type": "string",
+            "type": "integer",
             "pattern": "^(/^[A-Za-z ]+$/)$",
-            "minLength": "2",
-            "maxLength": "50"
+            "minLength": 2,
+            "maxLength": 50
           },
           "category": {
             "type": "string",
-            "enum": ["sell", "lost-found", "for-free"]
+            "enum": [
+              "sell",
+              "lost-found",
+              "for-free"
+            ]
           },
           "email": {
             "type": "string",
@@ -1750,9 +1913,9 @@
             "pattern": "^(/^\\+380\\d{9}$/)$"
           },
           "comments": {
-            "type": "string",
-            "minLength": "8",
-            "maxLength": "120"
+            "type": "integer",
+            "minLength": 8,
+            "maxLength": 120
           },
           "image": {
             "type": "string",
@@ -1806,14 +1969,13 @@
           }
         }
       }
-    }
-  },
-
-  "securitySchemes": {
-    "Bearer": {
-      "type": "http",
-      "scheme": "bearer",
-      "bearerFormat": "JWT"
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
   }
 }
