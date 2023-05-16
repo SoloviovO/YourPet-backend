@@ -1,11 +1,14 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.14",
+    "version": "1.0.16",
     "title": "Swagger YourPet",
-    "description": "This is the server of the YourPet website."
+    "description": "API documentation for GoIT. Team NodeMoon - project  YourPet. https://github.com/SoloviovO/YourPet-backend"
   },
   "servers": [
+    {
+      "url": "https://yourpet-backend.onrender.com/api"
+    },
     {
       "url": "http://localhost:3000/api"
     }
@@ -39,9 +42,7 @@
   "paths": {
     "/auth/register": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "Registration",
         "requestBody": {
           "required": true,
@@ -75,9 +76,7 @@
     },
     "/auth/login": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "Login",
         "requestBody": {
           "description": "Login's object",
@@ -92,7 +91,7 @@
         },
         "responses": {
           "200": {
-            "description": "Returns a user object + token + refreshToken",
+            "description": "Returns a user object + accessToken + refreshToken",
             "content": {
               "application/json": {
                 "schema": {
@@ -115,9 +114,7 @@
     },
     "/auth/refresh": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "Refresh token",
         "security": [
           {
@@ -137,7 +134,7 @@
         },
         "responses": {
           "200": {
-            "description": "Returns token + refreshToken",
+            "description": "Returns accessToken + refreshToken",
             "content": {
               "application/json": {
                 "schema": {
@@ -146,8 +143,11 @@
               }
             }
           },
+          "401": {
+            "description": "Not authorized"
+          },
           "403": {
-            "description": "Token invalid",
+            "description": "accessToken invalid",
             "content": {}
           }
         }
@@ -155,9 +155,7 @@
     },
     "/auth/logout": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "Logout",
         "security": [
           {
@@ -166,16 +164,29 @@
         ],
         "responses": {
           "204": {
-            "description": "Deleted successfully"
+            "description": " "
+          },
+          "401": {
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/auth/google": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Google authentication",
+        "responses": {
+          "200": {
+            "description": "Successful operation (redirect to front-end with accessToken, refreshToken and sid in query). Then use GET  . . . . . . . . . . . . . .",
+            "content": {}
           }
         }
       }
     },
     "/user/current": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "summary": "User current",
         "security": [
           {
@@ -192,15 +203,16 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Not authorized"
           }
         }
       }
     },
     "/user/update": {
       "patch": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "summary": "UpdateUserInfo",
         "security": [
           {
@@ -232,6 +244,9 @@
           "400": {
             "description": "Validation error"
           },
+          "401": {
+            "description": "Not authorized"
+          },
           "404": {
             "description": "Not found"
           }
@@ -240,9 +255,7 @@
     },
     "/user/avatars": {
       "patch": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "summary": "Avatar",
         "security": [
           {
@@ -270,15 +283,19 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad avatar"
+          },
+          "401": {
+            "description": "Not authorized"
           }
         }
       }
     },
     "/user/favorite": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "summary": "Favorite",
         "parameters": [
           {
@@ -311,15 +328,16 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Not authorized"
           }
         }
       }
     },
     "/user/favorite/{id}": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "summary": "Add Favorite",
         "parameters": [
           {
@@ -350,15 +368,16 @@
           "400": {
             "description": "This entry has already been added to the favorites list"
           },
+          "401": {
+            "description": "Not authorized"
+          },
           "404": {
             "description": "This entry is not found"
           }
         }
       },
       "delete": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "summary": "Delete Favorite",
         "parameters": [
           {
@@ -389,15 +408,16 @@
           "400": {
             "description": "This entry is not in your favorites list",
             "content": {}
+          },
+          "401": {
+            "description": "Not authorized"
           }
         }
       }
     },
     "/notices": {
       "get": {
-        "tags": [
-          "Notices"
-        ],
+        "tags": ["Notices"],
         "summary": "Get notices by category",
         "parameters": [
           {
@@ -405,11 +425,7 @@
             "name": "category",
             "schema": {
               "type": "string",
-              "enum": [
-                "sell",
-                "lost-found",
-                "for-free"
-              ]
+              "enum": ["sell", "lost-found", "for-free"]
             },
             "required": true
           },
@@ -445,9 +461,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Notices"
-        ],
+        "tags": ["Notices"],
         "summary": "Adds notices to the selected category",
         "requestBody": {
           "required": true,
@@ -459,6 +473,11 @@
             }
           }
         },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Added an ad to the category",
@@ -472,22 +491,23 @@
           },
           "400": {
             "description": "Invalid category, please select one of next category: sell; lost-found; for-free"
+          },
+          "401": {
+            "description": "Not authorized"
           }
         }
       }
     },
     "/notices/find": {
       "get": {
-        "tags": [
-          "Notices"
-        ],
+        "tags": ["Notices"],
         "summary": "Find notice by title",
         "parameters": [
           {
             "in": "query",
             "name": "title",
             "schema": {
-              "type": "integer",
+              "type": "string",
               "minLength": 2,
               "maxLength": 16
             },
@@ -499,11 +519,7 @@
             "name": "category",
             "schema": {
               "type": "string",
-              "enum": [
-                "sell",
-                "lost-found",
-                "for-free"
-              ]
+              "enum": ["sell", "lost-found", "for-free"]
             },
             "required": true
           },
@@ -539,11 +555,121 @@
         }
       }
     },
+    "/notices/favorite": {
+      "get": {
+        "tags": ["Notices"],
+        "summary": " Find favorite notice by title ",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "schema": {
+              "type": "integer",
+              "minLength": 2,
+              "maxLength": 16
+            },
+            "description": "The value is assigned to the title",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return favorite notice by title",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteNoticeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/notices/owner": {
+      "get": {
+        "tags": ["Notices"],
+        "summary": " Find own notice by title  ",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 16
+            },
+            "description": "The value is assigned to the title",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return favorite notice by title",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OwnerResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
     "/notices/user": {
       "get": {
-        "tags": [
-          "Notices"
-        ],
+        "tags": ["Notices"],
         "summary": "Notices by authorized user",
         "security": [
           {
@@ -560,15 +686,16 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Not authorized"
           }
         }
       }
     },
     "/notices/{id}": {
       "get": {
-        "tags": [
-          "Notices"
-        ],
+        "tags": ["Notices"],
         "summary": "Get full info about notice",
         "parameters": [
           {
@@ -578,11 +705,6 @@
               "type": "string"
             },
             "required": true
-          }
-        ],
-        "security": [
-          {
-            "Bearer": []
           }
         ],
         "responses": {
@@ -602,9 +724,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Notices"
-        ],
+        "tags": ["Notices"],
         "summary": "Delete notice by authorized user",
         "parameters": [
           {
@@ -625,6 +745,12 @@
           "200": {
             "description": "Delete success"
           },
+          "400": {
+            "description": "This notice is not yours"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
           "404": {
             "description": "There is no such id"
           }
@@ -633,9 +759,7 @@
     },
     "/friends": {
       "get": {
-        "tags": [
-          "Friends"
-        ],
+        "tags": ["Friends"],
         "summary": "Get friends or sponsor",
         "responses": {
           "200": {
@@ -653,9 +777,7 @@
     },
     "/news": {
       "get": {
-        "tags": [
-          "News"
-        ],
+        "tags": ["News"],
         "summary": "Get news",
         "parameters": [
           {
@@ -689,9 +811,7 @@
     },
     "/news/title": {
       "get": {
-        "tags": [
-          "News"
-        ],
+        "tags": ["News"],
         "summary": "Found news by title",
         "parameters": [
           {
@@ -742,9 +862,7 @@
     },
     "/pets": {
       "post": {
-        "tags": [
-          "Pets"
-        ],
+        "tags": ["Pets"],
         "summary": "Add your pet",
         "security": [
           {
@@ -754,7 +872,7 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/PetsRequest"
               }
@@ -773,16 +891,17 @@
             }
           },
           "400": {
-            "description": "missing required field"
+            "description": "Missing required field"
+          },
+          "401": {
+            "description": "Not authorized"
           }
         }
       }
     },
     "/pets/{id}": {
       "delete": {
-        "tags": [
-          "Pets"
-        ],
+        "tags": ["Pets"],
         "summary": "Delete pet by authorized user",
         "parameters": [
           {
@@ -801,7 +920,13 @@
         ],
         "responses": {
           "200": {
-            "description": "Pet deleted"
+            "description": "Delete success"
+          },
+          "400": {
+            "description": "This pet is not yours"
+          },
+          "401": {
+            "description": "Not authorized"
           },
           "404": {
             "description": "There is no such id"
@@ -814,10 +939,7 @@
     "schemas": {
       "RegistrationRequest": {
         "type": "object",
-        "required": [
-          "email",
-          "password"
-        ],
+        "required": ["email", "password"],
         "properties": {
           "email": {
             "type": "string",
@@ -864,22 +986,19 @@
         },
         "example": {
           "user": {
-            "id": "645624fbd1c0ebc66ccdb00a",
-            "email": "heyekep@soombo.com",
+            "id": "6463738424c0812f33a0a3e3",
+            "email": "user@example.com",
             "name": "Name",
-            "birthday": "11.11.1131",
+            "birthday": "00.00.0000",
             "phone": "+380000000000",
-            "city": "Sumny",
-            "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889"
+            "city": "City",
+            "image": "https://drive.google.com/file/d/1JKalmY5-x8wbrspY075e3N08K2e5LWnU/view"
           }
         }
       },
       "LoginRequest": {
         "type": "object",
-        "required": [
-          "email",
-          "password"
-        ],
+        "required": ["email", "password"],
         "properties": {
           "email": {
             "type": "string",
@@ -897,7 +1016,7 @@
       "LoginResponse": {
         "type": "object",
         "properties": {
-          "token": {
+          "accessToken": {
             "type": "string"
           },
           "refreshToken": {
@@ -908,35 +1027,33 @@
           }
         },
         "example": {
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDRiNmQ5NzU2YjljMzc2OTg0YjE0MDgiLCJzZXNzaW9uS2V5IjoiNGEwZTQ1M2EtN2NiMS00ZTgwLTllMTgtYmU0ZTQ3YzJhYjI1IiwiaWF0IjoxNjgyNjczOTI1LCJleHAiOjE2ODI2NzU3MjV9.nd49ejNfSriW6S3dSDAPfUpscukVtgQvN1fsd9y2uFc",
-          "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDU2MjRmYmQxYzBlYmM2NmNjZGIwMGEiLCJzZXNzaW9uS2V5IjoiYzFjMjMzNTYtNWI3Yy00MjFkLWFmNzAtYjM5YjE2OGIxNDk3IiwiaWF0IjoxNjgzNDExMjg0LCJleHAiOjE4NjM0MTEyODR9.0QXD5iPujHoow3aExltvoAO208s5Z5h56pmg8Oj-mno",
+          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDYzNzM4NDI0YzA4MTJmMzNhMGEzZTMiLCJzZXNzaW9uS2V5IjoiNzdkZmZlNzctMTk0OS00Y2E3LWFlNjMtMjY2NTI5NjYzOTEwIiwiaWF0IjoxNjg0MjM5MzY0LCJleHAiOjE2ODQ0MTkzNjR9.Ejnv8vNIRUPyhyb4Sspt5OKYbT-5tSoGbxAoVHSOxnI",
+          "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDYzNzM4NDI0YzA4MTJmMzNhMGEzZTMiLCJzZXNzaW9uS2V5IjoiNzdkZmZlNzctMTk0OS00Y2E3LWFlNjMtMjY2NTI5NjYzOTEwIiwiaWF0IjoxNjg0MjM5MzY0LCJleHAiOjE4NjQyMzkzNjR9.e6nyxd_k0OC7jUBHL_JHKcbCtymvmu4f8ihJWWtBipk",
           "user": {
-            "id": "645624fbd1c0ebc66ccdb00a",
-            "email": "heyekep@soombo.com",
+            "id": "6463738424c0812f33a0a3e3",
+            "email": "user@example.com",
             "name": "Name",
-            "birthday": "11.11.1131",
+            "birthday": "00.00.0000",
             "phone": "+380000000000",
-            "city": "Sumny",
-            "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889"
+            "city": "City",
+            "image": "https://drive.google.com/file/d/1JKalmY5-x8wbrspY075e3N08K2e5LWnU/view"
           }
         }
       },
       "RefreshRequest": {
         "type": "object",
-        "required": [
-          "refreshToken"
-        ],
+        "required": ["refreshToken"],
         "properties": {
           "refreshToken": {
             "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDU2MjRmYmQxYzBlYmM2NmNjZGIwMGEiLCJzZXNzaW9uS2V5IjoiYzFjMjMzNTYtNWI3Yy00MjFkLWFmNzAtYjM5YjE2OGIxNDk3IiwiaWF0IjoxNjgzNDExMjg0LCJleHAiOjE4NjM0MTEyODR9.0QXD5iPujHoow3aExltvoAO208s5Z5h56pmg8Oj-mno"
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDYzNzM4NDI0YzA4MTJmMzNhMGEzZTMiLCJzZXNzaW9uS2V5IjoiNzdkZmZlNzctMTk0OS00Y2E3LWFlNjMtMjY2NTI5NjYzOTEwIiwiaWF0IjoxNjg0MjM5MzY0LCJleHAiOjE4NjQyMzkzNjR9.e6nyxd_k0OC7jUBHL_JHKcbCtymvmu4f8ihJWWtBipk"
           }
         }
       },
       "RefreshResponse": {
         "type": "object",
         "properties": {
-          "token": {
+          "accessToken": {
             "type": "string"
           },
           "refreshToken": {
@@ -944,15 +1061,13 @@
           }
         },
         "example": {
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDRiNmQ5NzU2YjljMzc2OTg0YjE0MDgiLCJzZXNzaW9uS2V5IjoiNGEwZTQ1M2EtN2NiMS00ZTgwLTllMTgtYmU0ZTQ3YzJhYjI1IiwiaWF0IjoxNjgyNjczOTI1LCJleHAiOjE2ODI2NzU3MjV9.nd49ejNfSriW6S3dSDAPfUpscukVtgQvN1fsd9y2uFc",
-          "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDU2MjRmYmQxYzBlYmM2NmNjZGIwMGEiLCJzZXNzaW9uS2V5IjoiYzFjMjMzNTYtNWI3Yy00MjFkLWFmNzAtYjM5YjE2OGIxNDk3IiwiaWF0IjoxNjgzNDExMjg0LCJleHAiOjE4NjM0MTEyODR9.0QXD5iPujHoow3aExltvoAO208s5Z5h56pmg8Oj-mno"
+          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDYzNzM4NDI0YzA4MTJmMzNhMGEzZTMiLCJzZXNzaW9uS2V5IjoiNzdkZmZlNzctMTk0OS00Y2E3LWFlNjMtMjY2NTI5NjYzOTEwIiwiaWF0IjoxNjg0MjM5MzY0LCJleHAiOjE2ODQ0MTkzNjR9.Ejnv8vNIRUPyhyb4Sspt5OKYbT-5tSoGbxAoVHSOxnI",
+          "refreshToken": "yyJhdfgGciOiJIUzI1NiIdfggh5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDYzNzM4NDI0YzA4MTJmMzNhMGEzZTMiLCJzZXNzaW9uS2V5IjoiNzdkZmZlNzctMTk0OS00Y2E3LWFlNjMtMjY2NTI5NjYzOTEwIiwiaWF0IjoxNjg0MjM5MzY0LCJleHAiOjE4NjQyMzkzNjR9.e6nyxd_k0OC7jUBHL_JHKcbCtymvmu4f8ihJWvvbbbnnk"
         }
       },
       "LogoutRequest": {
         "type": "object",
-        "required": [
-          "id"
-        ],
+        "required": ["id"],
         "properties": {
           "id": {
             "type": "string",
@@ -975,11 +1090,11 @@
           },
           "birthday": {
             "type": "string",
-            "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+            "pattern": "^(^\\d{2}\\.\\d{2}\\.\\d{4}$)$"
           },
           "phone": {
             "type": "string",
-            "pattern": "^(/^\\+380\\d{9}$/)$"
+            "pattern": "^(^\\+380\\d{9}$)$"
           },
           "city": {
             "type": "string",
@@ -997,44 +1112,59 @@
           }
         },
         "example": {
-          "id": "645624fbd1c0ebc66ccdb00a",
-          "email": "heyekep@soombo.com",
-          "name": "Name",
-          "birthday": "11.11.1131",
-          "phone": "+380000000000",
-          "city": "Sumny",
-          "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
+          "id": "6463738424c0812f33a0a3e3",
+          "email": "user@example.com",
+          "name": "Ivan",
+          "birthday": "01.01.2000",
+          "phone": "+380994455666",
+          "city": "Lviv",
+          "image": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1684241239/o4m4tdkx5rm0bkum9sbd.png",
           "favorite": [
-            {
-              "_id": "6454eb3f52f8c3f6336741b1",
-              "title": "Adorable kitten",
-              "name": "Snowball",
-              "birthday": "15.05.2021",
-              "breed": "Siamese",
-              "location": "London",
-              "sex": "female",
-              "category": "sell",
-              "price": "800$",
-              "email": "user3@net.com",
-              "phone": "+380661234567",
-              "comments": "She is litter box trained and loves to cuddle!",
-              "image": "https://source.unsplash.com/random?animals&cat&dog"
-            }
+              {
+                  "_id": "646083f4874bee17c9118d2c",
+                  "title": "Friendly cat",
+                  "name": "Whiskers",
+                  "birthday": "01.01.2018",
+                  "breed": "Domestic Shorthair",
+                  "location": "New York City",
+                  "sex": "male",
+                  "category": "for-free",
+                  "email": "catlover@gmail.com",
+                  "phone": "+1-555-1234",
+                  "comments": "Whiskers is very friendly and loves cuddles. Looking for a new home as I am moving overseas.",
+                  "image": "https://source.unsplash.com/random?animals&cat&dog"
+              }
           ],
           "pets": [
-            {
-              "name": "Baddy",
-              "dateOfBirth": "12.03.2022",
-              "breed": "vivcharka",
-              "photoURL": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1683546305/gqslezwipr2dap8iktbx.jpg",
-              "comments": "Good boy",
-              "owner": "6458ca434bbf87bcf5b6f0c2",
-              "_id": "6458e0c1e0db665b6175aab2",
-              "createdAt": "2023-05-08T11:45:05.441Z",
-              "updatedAt": "2023-05-08T11:45:05.441Z"
-            }
+              {
+                  "_id": "646385d424c0812f33a0aae4",
+                  "name": "Lesyk",
+                  "birthday": "11.11.2020",
+                  "breed": "york",
+                  "comments": "Very fany dog",
+                  "image": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1684243923/hvuhiz0m5yceo7rvwejo.png",
+                  "owner": "6463738424c0812f33a0a3e3"
+              }
+          ],
+          "notices": [
+              {
+                  "_id": "6463888c24c0812f33a0ab5a",
+                  "title": "My best friend",
+                  "name": "Rex",
+                  "birthday": "11.11.2015",
+                  "breed": "taksa",
+                  "location": "Sumy",
+                  "sex": "male",
+                  "category": "sell",
+                  "price": "400",
+                  "comments": "Difficult god",
+                  "image": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1684244620/va96zncab7vq5srzfu2k.png",
+                  "owner": "6463738424c0812f33a0a3e3",
+                  "email": "user@example.com",
+                  "phone": "+380994455666"
+              }
           ]
-        }
+      }
       },
       "UpdateRequest": {
         "type": "object",
@@ -1044,15 +1174,18 @@
             "format": "email"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "example": "Ivan"
           },
           "birthday": {
             "type": "string",
-            "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+            "pattern": "^(^\\d{2}\\.\\d{2}\\.\\d{4}$)$",
+            "example": "01.01.2000"
           },
           "phone": {
             "type": "string",
-            "pattern": "^(/^\\+380\\d{9}$/)$"
+            "pattern": "^(^\\+380\\d{9}$)$",
+            "example": "+380994455666"
           },
           "city": {
             "type": "string",
@@ -1079,15 +1212,17 @@
           },
           "birthday": {
             "type": "string",
-            "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+            "pattern": "^(^\\d{2}\\.\\d{2}\\.\\d{4}$)$",
+            "example": "01.01.2000"
           },
           "phone": {
             "type": "string",
-            "pattern": "^(/^\\+380\\d{9}$/)$"
+            "pattern": "^(/^\\+380\\d{9}$/)$",
+            "example": "+380994455666"
           },
           "city": {
             "type": "string",
-            "pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$",
+            "pattern": "^(^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$)$",
             "example": "Lviv"
           },
           "image": {
@@ -1101,23 +1236,19 @@
           }
         },
         "example": {
-          "_id": "645624fbd1c0ebc66ccdb00a",
-          "passwordHash": "$2b$10$6ntmCd7hryZFRxEcm5Vuru2nDDSNGKGwEA3LXr0OQW7bOxIfCV/iq",
-          "name": "Name",
-          "email": "heyekep@soombo.com",
-          "birthday": "11.11.1131",
-          "phone": "+380000000000",
-          "city": "Sumny",
-          "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
-          "favorite": [],
-          "pets": [],
-          "sessionKey": "5037cd19-9d58-4844-b413-ff237c100a45"
+          "_id": "6463738424c0812f33a0a3e3",
+          "name": "Ivan",
+          "email": "user@example.com",
+          "birthday": "01.01.2000",
+          "phone": "+380994455666",
+          "city": "Lviv",
+          "image": "https://drive.google.com/file/d/1JKalmY5-x8wbrspY075e3N08K2e5LWnU/view"
         }
       },
       "AvatarRequest": {
         "type": "object",
         "properties": {
-          "image": {
+          "avatar": {
             "type": "string",
             "format": "binary"
           }
@@ -1131,11 +1262,9 @@
             "format": "binary"
           }
         },
-        "example": [
-          {
-            "image": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1683411947/iz0dnt2broomqznxmgjv.png"
-          }
-        ]
+        "example": {
+          "image": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1684241239/o4m4tdkx5rm0bkum9sbd.png"
+        }
       },
       "FavoriteResponse": {
         "type": "object",
@@ -1171,41 +1300,40 @@
               },
               "favorite": {
                 "$ref": "#/components/schemas/Favorite"
-              },
-              "pets": {},
-              "notices": {}
+              }
             }
+          },
+          "total": {
+            "type": "integer"
           }
         },
         "example": {
           "user": {
-            "id": "645624fbd1c0ebc66ccdb00a",
-            "email": "heyekep@soombo.com",
-            "name": "Name",
-            "birthday": "11.11.1131",
-            "phone": "+380000000000",
-            "city": "Sumny",
-            "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
+            "id": "6463738424c0812f33a0a3e3",
+            "email": "user@example.com",
+            "name": "Ivan",
+            "birthday": "01.01.2000",
+            "phone": "+380994455666",
+            "city": "Lviv",
+            "image": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1684241239/o4m4tdkx5rm0bkum9sbd.png",
             "favorite": [
               {
-                "_id": "6454eb3f52f8c3f6336741b2",
-                "title": "Exotic bird",
-                "name": "Rainbow",
-                "birthday": "01.01.2019",
-                "breed": "Macaw",
-                "location": "Miami",
+                "_id": "646083f4874bee17c9118d2c",
+                "title": "Friendly cat",
+                "name": "Whiskers",
+                "birthday": "01.01.2018",
+                "breed": "Domestic Shorthair",
+                "location": "New York City",
                 "sex": "male",
-                "category": "sell",
-                "price": "3000$",
-                "email": "user4@net.com",
-                "phone": "+380661234567",
-                "comments": "He loves to mimic sounds and is very intelligent!",
+                "category": "for-free",
+                "email": "catlover@gmail.com",
+                "phone": "+1-555-1234",
+                "comments": "Whiskers is very friendly and loves cuddles. Looking for a new home as I am moving overseas.",
                 "image": "https://source.unsplash.com/random?animals&cat&dog"
               }
-            ],
-            "pets": [],
-            "notices": []
-          }
+            ]
+          },
+          "total": 1
         }
       },
       "AddFavoriteResponse": {
@@ -1229,11 +1357,11 @@
               },
               "birthday": {
                 "type": "string",
-                "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+                "pattern": "^(^\\d{2}\\.\\d{2}\\.\\d{4}$)$"
               },
               "phone": {
                 "type": "string",
-                "pattern": "^(/^\\+380\\d{9}$/)$"
+                "pattern": "^(^\\+380\\d{9}$)$"
               },
               "city": {
                 "type": "string",
@@ -1253,39 +1381,33 @@
             }
           }
         },
-        "example": [
-          {
-            "user": {
-              "_id": "645624fbd1c0ebc66ccdb00a",
-              "passwordHash": "$2b$10$6ntmCd7hryZFRxEcm5Vuru2nDDSNGKGwEA3LXr0OQW7bOxIfCV/iq",
-              "name": "Name",
-              "email": "heyekep@soombo.com",
-              "birthday": "00.00.0000",
-              "phone": "+380000000000",
-              "city": "City",
-              "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
-              "favorite": [
-                {
-                  "_id": "6454eb3f52f8c3f6336741b1",
-                  "title": "Adorable kitten",
-                  "name": "Snowball",
-                  "birthday": "15.05.2021",
-                  "breed": "Siamese",
-                  "location": "London",
-                  "sex": "female",
-                  "category": "sell",
-                  "price": "800$",
-                  "email": "user3@net.com",
-                  "phone": "+380661234567",
-                  "comments": "She is litter box trained and loves to cuddle!",
-                  "image": "https://source.unsplash.com/random?animals&cat&dog"
-                }
-              ],
-              "pets": [],
-              "sessionKey": "598e9cae-19d4-4503-8924-276912e42b6f"
-            }
+        "example": {
+          "user": {
+            "_id": "6463738424c0812f33a0a3e3",
+            "name": "Ivan",
+            "email": "user@example.com",
+            "birthday": "01.01.2000",
+            "phone": "+380994455666",
+            "city": "Lviv",
+            "image": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1684241239/o4m4tdkx5rm0bkum9sbd.png",
+            "favorite": [
+              {
+                "_id": "646083f4874bee17c9118d2c",
+                "title": "Friendly cat",
+                "name": "Whiskers",
+                "birthday": "01.01.2018",
+                "breed": "Domestic Shorthair",
+                "location": "New York City",
+                "sex": "male",
+                "category": "for-free",
+                "email": "catlover@gmail.com",
+                "phone": "+1-555-1234",
+                "comments": "Whiskers is very friendly and loves cuddles. Looking for a new home as I am moving overseas.",
+                "image": "https://source.unsplash.com/random?animals&cat&dog"
+              }
+            ]
           }
-        ]
+        }
       },
       "DeleteFavoriteResponse": {
         "type": "object",
@@ -1308,11 +1430,11 @@
               },
               "birthday": {
                 "type": "string",
-                "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+                "pattern": "^(^\\d{2}\\.\\d{2}\\.\\d{4}$)$"
               },
               "phone": {
                 "type": "string",
-                "pattern": "^(/^\\+380\\d{9}$/)$"
+                "pattern": "^(^\\+380\\d{9}$)$"
               },
               "city": {
                 "type": "string",
@@ -1332,17 +1454,14 @@
         },
         "example": {
           "user": {
-            "_id": "645624fbd1c0ebc66ccdb00a",
-            "passwordHash": "$2b$10$6ntmCd7hryZFRxEcm5Vuru2nDDSNGKGwEA3LXr0OQW7bOxIfCV/iq",
-            "name": "Name",
-            "email": "heyekep@soombo.com",
-            "birthday": "00.00.0000",
-            "phone": "+380000000000",
-            "city": "City",
-            "image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
-            "favorite": [],
-            "pets": [],
-            "sessionKey": "598e9cae-19d4-4503-8924-276912e42b6f"
+            "_id": "6463738424c0812f33a0a3e3",
+            "name": "Ivan",
+            "email": "user@example.com",
+            "birthday": "01.01.2000",
+            "phone": "+380994455666",
+            "city": "Lviv",
+            "image": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1684241239/o4m4tdkx5rm0bkum9sbd.png",
+            "favorite": []
           }
         }
       },
@@ -1358,16 +1477,16 @@
           "category",
           "email",
           "phone",
-          "image"
+          "avatar"
         ],
         "properties": {
           "title": {
-            "type": "integer",
+            "type": "string",
             "minLength": 2,
             "maxLength": 16
           },
           "name": {
-            "type": "integer",
+            "type": "string",
             "minLength": 2,
             "maxLength": 16
           },
@@ -1376,7 +1495,7 @@
             "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
           },
           "breed": {
-            "type": "integer",
+            "type": "string",
             "minLength": 2,
             "maxLength": 16
           },
@@ -1385,18 +1504,14 @@
             "example": "male or female"
           },
           "location": {
-            "type": "integer",
+            "type": "string",
             "pattern": "^(/^[A-Za-z ]+$/)$",
             "minLength": 2,
             "maxLength": 50
           },
           "category": {
             "type": "string",
-            "enum": [
-              "sell",
-              "lost-found",
-              "for-free"
-            ]
+            "enum": ["sell", "lost-found", "for-free"]
           },
           "email": {
             "type": "string",
@@ -1404,14 +1519,14 @@
           },
           "phone": {
             "type": "string",
-            "pattern": "^(/^\\+380\\d{9}$/)$"
+            "pattern": "^(^\\+380\\d{9}$)$"
           },
           "comments": {
-            "type": "integer",
+            "type": "string",
             "minLength": 8,
             "maxLength": 120
           },
-          "image": {
+          "avatar": {
             "type": "string",
             "format": "binary"
           }
@@ -1431,28 +1546,24 @@
           },
           "birthday": {
             "type": "string",
-            "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+            "pattern": "^(^\\d{2}\\.\\d{2}\\.\\d{4}$)$"
           },
           "breed": {
             "type": "string"
           },
           "sex": {
             "type": "string",
-            "enum": [
-              "male",
-              "female"
-            ]
+            "enum": ["male", "female"]
           },
           "location": {
             "type": "string"
           },
           "category": {
             "type": "string",
-            "enum": [
-              "sell",
-              "lost-found",
-              "for-free"
-            ]
+            "enum": ["sell", "lost-found", "for-free"]
+          },
+          "price": {
+            "type": "string"
           },
           "email": {
             "type": "string",
@@ -1460,7 +1571,7 @@
           },
           "phone": {
             "type": "string",
-            "pattern": "^(/^\\+380\\d{9}$/)$"
+            "pattern": "^(^\\+380\\d{9}$)$"
           },
           "comments": {
             "type": "string"
@@ -1471,173 +1582,381 @@
           }
         },
         "example": {
-          "_id": "6454eb3f52f8c3f6336741b8",
-          "title": "Friendly cat",
-          "name": "Socks",
-          "birthday": "15.03.2019",
-          "breed": "Domestic Shorthair",
-          "location": "New York",
+          "title": "My best friend",
+          "name": "Rex",
+          "birthday": "11.11.2015",
+          "breed": "taksa",
+          "location": "Sumy",
           "sex": "male",
-          "category": "lost-found",
-          "email": "jane@net.com",
-          "phone": "+14155552678",
-          "comments": "Socks is very social and loves to play!",
-          "image": "https://source.unsplash.com/random?animals&cat&dog"
-        }
+          "category": "sell",
+          "price": "400",
+          "comments": "Difficult god",
+          "image": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1684244620/va96zncab7vq5srzfu2k.png",
+          "owner": "6463738424c0812f33a0a3e3",
+          "email": "user@example.com",
+          "phone": "+380994455666",
+          "_id": "6463888c24c0812f33a0ab5a"
+      }
       },
       "FindeTitleResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "_id": {
-              "type": "string"
-            },
-            "title": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "birthday": {
-              "type": "string",
-              "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
-            },
-            "breed": {
-              "type": "string"
-            },
-            "sex": {
-              "type": "string",
-              "enum": [
-                "male ",
-                "female"
-              ]
-            },
-            "location": {
-              "type": "string"
-            },
-            "category": {
-              "type": "string"
-            },
-            "email": {
-              "type": "string",
-              "format": "email"
-            },
-            "phone": {
-              "type": "string",
-              "pattern": "^(/^\\+380\\d{9}$/)$"
-            },
-            "comments": {
-              "type": "string"
-            },
-            "image": {
-              "type": "string",
-              "format": "binary"
+        "type": "object",
+        "properties": {
+          "notices": {
+            "type": "array",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 16
+              },
+              "name": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 16
+              },
+              "birthday": {
+                "type": "string",
+                "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+              },
+              "breed": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 16
+              },
+              "sex": {
+                "type": "string",
+                "enum": ["male ", "female"]
+              },
+              "location": {
+                "type": "string",
+                "pattern": "^(/^[A-Za-z ]+$/)$",
+                "minLength": 2,
+                "maxLength": 50
+              },
+              "category": {
+                "type": "string",
+                "enum": ["sell", "lost-found", "for-free"]
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "phone": {
+                "type": "string",
+                "pattern": "^(/^\\+380\\d{9}$/)$"
+              },
+              "comments": {
+                "type": "string",
+                "minLength": 8,
+                "maxLength": 120
+              },
+              "image": {
+                "type": "string",
+                "format": "binary"
+              },
+              "owner": {
+                "type": "string"
+              }
             }
+          },
+          "total": {
+            "type": "integer"
           }
         },
-        "example": [
-          {
-            "_id": "637216768f895fcabfd83e67",
-            "title": "Graceful cat",
-            "name": "Luna",
-            "birthday": "20.03.2021",
-            "breed": "Persian",
-            "location": "Paris",
-            "sex": "female",
-            "category": "sell",
-            "price": "1200$",
-            "email": "user9@net.com",
-            "phone": "+380661234567",
-            "comments": "She has beautiful long fur and is very graceful!",
-            "image": "https://source.unsplash.com/random?animals&cat&dog"
+        "example": {
+          "notices": [
+              {
+                  "_id": "646083f4874bee17c9118d1f",
+                  "title": "Graceful cat",
+                  "name": "Luna",
+                  "birthday": "20.03.2021",
+                  "breed": "Persian",
+                  "location": "Paris",
+                  "sex": "female",
+                  "category": "sell",
+                  "price": "1200$",
+                  "email": "user9@net.com",
+                  "phone": "+380661234567",
+                  "comments": "She has beautiful long fur and is very graceful!",
+                  "image": "https://source.unsplash.com/random?animals&cat&dog"
+              }
+          ],
+          "total": 1
+      }
+      },
+      "FavoriteNoticeResponse": {
+        "type": "object",
+        "properties": {
+          "notices": {
+            "type": "array",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 16
+              },
+              "name": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 16
+              },
+              "birthday": {
+                "type": "string",
+                "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+              },
+              "breed": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 16
+              },
+              "sex": {
+                "type": "string",
+                "enum": ["male ", "female"]
+              },
+              "location": {
+                "type": "string",
+                "pattern": "^(/^[A-Za-z ]+$/)$",
+                "minLength": 2,
+                "maxLength": 50
+              },
+              "category": {
+                "type": "string",
+                "enum": ["sell", "lost-found", "for-free"]
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "phone": {
+                "type": "string",
+                "pattern": "^(/^\\+380\\d{9}$/)$"
+              },
+              "comments": {
+                "type": "string",
+                "minLength": 8,
+                "maxLength": 120
+              },
+              "image": {
+                "type": "string",
+                "format": "binary"
+              },
+              "owner": {
+                "type": "string"
+              }
+            }
+          },
+          "total": {
+            "type": "integer"
           }
-        ]
+        },
+        "example": {
+          "notices": [
+              {
+                  "_id": "646083f4874bee17c9118d2c",
+                  "title": "Friendly cat",
+                  "name": "Whiskers",
+                  "birthday": "01.01.2018",
+                  "breed": "Domestic Shorthair",
+                  "location": "New York City",
+                  "sex": "male",
+                  "category": "for-free",
+                  "email": "catlover@gmail.com",
+                  "phone": "+1-555-1234",
+                  "comments": "Whiskers is very friendly and loves cuddles. Looking for a new home as I am moving overseas.",
+                  "image": "https://source.unsplash.com/random?animals&cat&dog"
+              }
+          ],
+          "total": 1
+      }
+      },
+      "OwnerResponse": {
+        "type": "object",
+        "properties": {
+          "notices": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 16
+              },
+              "name": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 16
+              },
+              "birthday": {
+                "type": "string",
+                "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+              },
+              "breed": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 16
+              },
+              "sex": {
+                "type": "string",
+                "enum": ["male ", "female"]
+              },
+              "location": {
+                "type": "string",
+                "pattern": "^(/^[A-Za-z ]+$/)$",
+                "minLength": 2,
+                "maxLength": 50
+              },
+              "category": {
+                "type": "string",
+                "enum": ["sell", "lost-found", "for-free"]
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "phone": {
+                "type": "string",
+                "pattern": "^(/^\\+380\\d{9}$/)$"
+              },
+              "comments": {
+                "type": "string",
+                "minLength": 8,
+                "maxLength": 120
+              },
+              "image": {
+                "type": "string",
+                "format": "binary"
+              },
+              "owner": {
+                "type": "string"
+              }
+            }
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "example":
+        {
+          "notices": [
+              {
+                  "_id": "6463888c24c0812f33a0ab5a",
+                  "title": "My best friend",
+                  "name": "Rex",
+                  "birthday": "11.11.2015",
+                  "breed": "taksa",
+                  "location": "Sumy",
+                  "sex": "male",
+                  "category": "sell",
+                  "price": "400",
+                  "comments": "Difficult god",
+                  "image": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1684244620/va96zncab7vq5srzfu2k.png",
+                  "owner": "6463738424c0812f33a0a3e3",
+                  "email": "user@example.com",
+                  "phone": "+380994455666"
+              }
+          ],
+          "total": 1
+      }
       },
       "NoticesUserResponse": {
         "type": "object",
         "properties": {
-          "_id": {
-            "type": "string"
+          "notices": {
+            "type": "array",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 16
+              },
+              "name": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 16
+              },
+              "birthday": {
+                "type": "string",
+                "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+              },
+              "breed": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 16
+              },
+              "sex": {
+                "type": "string",
+                "enum": ["male ", "female"]
+              },
+              "location": {
+                "type": "string",
+                "pattern": "^(/^[A-Za-z ]+$/)$",
+                "minLength": 2,
+                "maxLength": 50
+              },
+              "category": {
+                "type": "string",
+                "enum": ["sell", "lost-found", "for-free"]
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "phone": {
+                "type": "string",
+                "pattern": "^(/^\\+380\\d{9}$/)$"
+              },
+              "comments": {
+                "type": "string",
+                "minLength": 8,
+                "maxLength": 120
+              },
+              "image": {
+                "type": "string",
+                "format": "binary"
+              },
+              "owner": {
+                "type": "string"
+              }
+            }
           },
-          "title": {
-            "type": "integer",
-            "minLength": 2,
-            "maxLength": 16
-          },
-          "name": {
-            "type": "integer",
-            "minLength": 2,
-            "maxLength": 16
-          },
-          "birthday": {
-            "type": "string",
-            "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
-          },
-          "breed": {
-            "type": "integer",
-            "minLength": 2,
-            "maxLength": 16
-          },
-          "sex": {
-            "type": "string",
-            "enum": [
-              "male ",
-              "female"
-            ]
-          },
-          "location": {
-            "type": "integer",
-            "pattern": "^(/^[A-Za-z ]+$/)$",
-            "minLength": 2,
-            "maxLength": 50
-          },
-          "category": {
-            "type": "string",
-            "enum": [
-              "sell",
-              "lost-found",
-              "for-free"
-            ]
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "phone": {
-            "type": "string",
-            "pattern": "^(/^\\+380\\d{9}$/)$"
-          },
-          "comments": {
-            "type": "integer",
-            "minLength": 8,
-            "maxLength": 120
-          },
-          "image": {
-            "type": "string",
-            "format": "binary"
-          },
-          "owner": {
-            "type": "string"
+          "total": {
+            "type": "integer"
           }
+      
         },
-        "example": [
-          {
-            "_id": "6454eb3f52f8c3f6336741b8",
-            "title": "Friendly cat",
-            "name": "Socks",
-            "birthday": "15.03.2019",
-            "breed": "Domestic Shorthair",
-            "location": "New York",
-            "sex": "male",
-            "category": "lost-found",
-            "email": "jane@net.com",
-            "phone": "+14155552678",
-            "comments": "Socks is very social and loves to play!",
-            "image": "https://source.unsplash.com/random?animals&cat&dog",
-            "owner": "6774eb3f45f8c3fs336741b8"
-          }
-        ]
+        "example": 
+        {
+          "notices": [
+              {
+                  "_id": "6463888c24c0812f33a0ab5a",
+                  "title": "My best friend",
+                  "name": "Rex",
+                  "birthday": "11.11.2015",
+                  "breed": "taksa",
+                  "location": "Sumy",
+                  "sex": "male",
+                  "category": "sell",
+                  "price": "400",
+                  "comments": "Difficult god",
+                  "image": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1684244620/va96zncab7vq5srzfu2k.png",
+                  "owner": "6463738424c0812f33a0a3e3",
+                  "email": "user@example.com",
+                  "phone": "+380994455666"
+              }
+          ],
+          "total": 1
+      }
       },
       "FriendsResponse": {
         "type": "array",
@@ -1680,89 +1999,147 @@
         },
         "example": [
           {
+            "_id": "645b6171874bee17c911885d",
+            "title": "Whiskas",
+            "url": "https://www.whiskas.ua/",
+            "addressUrl": null,
+            "imageUrl": "https://storage.googleapis.com/kidslikev2_bucket/pets-support/images/sponsors/frame_285.png",
+            "address": null,
+            "workDays": null,
+            "phone": "0-800-500-155",
+            "email": "whiskas@gmail.com"
+          },
+          {
+            "_id": "645b6171874bee17c911885b",
+            "title": "LICO",
+            "url": "https://lico.vet/",
+            "addressUrl": "https://goo.gl/maps/sub8u9TAAvLJRE9j9",
+            "imageUrl": "https://storage.googleapis.com/kidslikev2_bucket/pets-support/images/sponsors/frame_292.png",
+            "address": "Dryhetiv Street, 77",
             "workDays": [
+              {
+                "isOpen": true,
+                "from": "09:00",
+                "to": "20:00"
+              },
+              {
+                "isOpen": true,
+                "from": "09:00",
+                "to": "20:00"
+              },
+              {
+                "isOpen": true,
+                "from": "09:00",
+                "to": "20:00"
+              },
+              {
+                "isOpen": true,
+                "from": "09:00",
+                "to": "20:00"
+              },
+              {
+                "isOpen": true,
+                "from": "09:00",
+                "to": "20:00"
+              },
+              {
+                "isOpen": true,
+                "from": "09:00",
+                "to": "20:00"
+              },
               {
                 "isOpen": true,
                 "from": "09:00",
                 "to": "20:00"
               }
             ],
-            "_id": "6455125c52f8c3f6336741f7",
-            "title": "Whiskas",
-            "url": "https://www.whiskas.ua/",
-            "addressUrl": null,
-            "imageUrl": "https://storage.googleapis.com/kidslikev2_bucket/pets-support/images/sponsors/frame_285.png",
-            "address": null,
-            "phone": "+380800500155",
-            "email": null
+            "phone": "+38 (097) 509-80-05",
+            "email": "lico@gmail.com"
           }
         ]
       },
       "NewsResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "_id": {
-              "type": "string"
-            },
-            "title": {
-              "type": "integer",
-              "minLength": 2,
-              "maxLength": 16
-            },
-            "url": {
-              "type": "string"
-            },
-            "description": {
-              "type": "string"
-            },
-            "date": {
-              "type": "string",
-              "format": "date",
-              "default": null
+        "type": "object",
+        "properties": {
+          "news": {
+            "type": "array",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "integer",
+                "minLength": 2,
+                "maxLength": 16
+              },
+              "url": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string",
+                "format": "date",
+                "default": null
+              }
             }
           },
-          "example": {
-            "_id": "6455123652f8c3f6336741da",
-            "title": "В День ветеринара в столиці пройде безкоштовний тренінг з надання першої допомоги тваринам",
-            "url": "https://www.kmlvm.com.ua/v-den-veterynara-v-stolytsi-projde-bezkoshtovnyj-trening-z-nadannya-pershoyi-dopomogy-tvarynam/",
-            "description": "В неділю, 14 серпня, в Тимчасовому притулку для тварин «ВДНГ» пройде тренінг на тему «Надання першої допомоги тваринам». Захід проводиться комунальним підприємством «Київська міська лікарня ветеринарної медицини», фахівці якого навчать всіх бажаючих навичкам надання першої допомоги братам нашим меншим, які потрапили в біду. Без перебільшення, подібні знання можуть врятувати життя чотирилапим. Тренінг безкоштовний, взяти в ньому участь може будь-хто, дозволяється участь зі своїм домашнім улюбленцем. Після тренінгу учасники зможуть отримати безкоштовну консультацію ветеринара, щодо догляду за тваринами, вакцинації та будь-яких інших питань, пов'язаними зі здоров'ям улюбленця. Дата проведення майстер-класу обрана не випадково. 14 серпня в Україні відзначається День працівників ветеринарної медицини і цього року ми вирішили провести такий потрібний тренінг. Для ветеринара головне – це врятовані брати наші менші, а навчити людей надавати первинну допомогу тваринам значить «інвестувати» у врятовані життя тварин в майбутньому. Початок тренінгу об 11:00. Адреса Тимчасового притулку для тварин «ВДНГ»: вулиця Академіка Глушкова, 1, 16 павільйон.",
-            "date": "2022-08-12"
+          "total": {
+            "type": "integer"
           }
+        },
+        "example": {
+          "news": [
+            {
+              "_id": "645b6944874bee17c9118864",
+              "imgUrl": "https://www.nytimes.com/images/2023/03/15/nyregion/NY-FISH/NY-FISH-blog480.jpg",
+              "title": "When Helpless Fish Need a Hero, She Answers the Call",
+              "text": "Three hundred goldfish in a hospital basement, a suckermouth at the airport: When fish are in crisis, a Bronx beautician and a partner in Pennsylvania ride to the rescue.",
+              "date": "2023-03-17T09:00:35+0000",
+              "url": "https://www.nytimes.com/2023/03/17/nyregion/new-york-city-fish-rescue.html",
+              "id": "nyt://article/7bce8e93-e6b3-5cb7-ad38-a361fa0d2812"
+            },
+            {
+              "_id": "645b6944874bee17c911886a",
+              "imgUrl": "https://www.nytimes.com/images/2023/02/04/multimedia/00xp-high-dogs-01-pmgh/00xp-high-dogs-01-pmgh-blog480.jpg",
+              "title": "Nausea, Wobbling, Confusion: Dogs Are Getting Sick From Discarded Weed",
+              "text": "In places where recreational use is legal, dogs are getting sick from eating the remains of joints and other cannabis products, veterinarians and poison-control centers say.",
+              "date": "2023-02-13T14:02:29+0000",
+              "url": "https://www.nytimes.com/2023/02/13/nyregion/dogs-weed-nyc.html",
+              "id": "nyt://article/9cda24bb-5520-587b-97aa-039cd981ea91"
+            }
+          ],
+          "total": 1151
         }
       },
       "PetsRequest": {
         "type": "object",
-        "required": [
-          "name",
-          "birthday",
-          "breed",
-          "photoURL"
-        ],
+        "required": ["name", "birthday", "breed", "avatar"],
         "properties": {
           "name": {
-            "type": "integer",
+            "type": "string",
             "minLength": 2,
             "maxLength": 16
           },
           "birthday": {
             "type": "string",
-            "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$",
+            "pattern": "^(^\\d{2}\\.\\d{2}\\.\\d{4}$)$",
             "default": "00.00.0000"
           },
           "breed": {
-            "type": "integer",
+            "type": "string",
             "minLength": 2,
             "maxLength": 16
           },
           "comments": {
-            "type": "integer",
+            "type": "string",
             "minLength": 8,
             "maxLength": 120
           },
-          "photoURL": {
-            "type": "string"
+          "avatar": {
+            "type": "string",
+            "format":"binary"
           }
         }
       },
@@ -1800,14 +2177,14 @@
           }
         },
         "example": {
-          "name": "Baddy",
-          "birthday": "12.03.2022",
-          "breed": "vivcharka",
-          "photoURL": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1683546305/gqslezwipr2dap8iktbx.jpg",
-          "comments": "Good boy",
-          "owner": "6458ca434bbf87bcf5b6f0c2",
-          "_id": "6458e0c1e0db665b6175aab2"
-        }
+          "name": "Lesyk",
+          "birthday": "11.11.2020",
+          "breed": "york",
+          "comments": "Very fany dog",
+          "image": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1684243923/hvuhiz0m5yceo7rvwejo.png",
+          "owner": "6463738424c0812f33a0a3e3",
+          "_id": "646385d424c0812f33a0aae4"
+      }
       },
       "Favorite": {
         "type": "object",
@@ -1865,61 +2242,65 @@
             "type": "string"
           },
           "title": {
-            "type": "integer",
+            "type": "string",
             "minLength": 2,
-            "maxLength": 16
+            "maxLength": 16,
+            "example": "My best friend"
           },
           "name": {
-            "type": "integer",
+            "type": "string",
             "minLength": 2,
-            "maxLength": 16
+            "maxLength": 16,
+            "example": "Rex"
           },
           "birthday": {
             "type": "string",
-            "pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+            "pattern": "^(^\\d{2}\\.\\d{2}\\.\\d{4}$)$",
+            "example": "11.11.2015"
           },
           "breed": {
-            "type": "integer",
+            "type": "string",
             "minLength": 2,
-            "maxLength": 16
+            "maxLength": 16,
+            "example": "taksa"
           },
           "sex": {
             "type": "string",
-            "enum": [
-              "male",
-              "female"
-            ]
+            "enum": ["male", "female"],
+            "example": "male"
           },
           "location": {
-            "type": "integer",
+            "type": "string",
             "pattern": "^(/^[A-Za-z ]+$/)$",
             "minLength": 2,
-            "maxLength": 50
+            "maxLength": 50,
+            "example": "Sumy"
           },
           "category": {
             "type": "string",
-            "enum": [
-              "sell",
-              "lost-found",
-              "for-free"
-            ]
+            "enum": ["sell", "lost-found", "for-free"],
+            "example": "sell"
           },
           "email": {
             "type": "string",
-            "format": "email"
+            "format": "email",
+            "example": "user@example.com"
           },
           "phone": {
             "type": "string",
-            "pattern": "^(/^\\+380\\d{9}$/)$"
+            "pattern": "^(^\\+380\\d{9}$)$",
+            "example": "+380994455666"
           },
           "comments": {
-            "type": "integer",
+            "type": "string",
             "minLength": 8,
-            "maxLength": 120
+            "maxLength": 120,
+            "example": "Difficult god"
           },
           "image": {
             "type": "string",
-            "format": "binary"
+            "format": "binary",
+            "example": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1684244620/va96zncab7vq5srzfu2k.png"
           }
         }
       },
