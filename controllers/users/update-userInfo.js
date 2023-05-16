@@ -31,9 +31,12 @@ const updateUserInfo = async (req, res, next) => {
       city,
     },
     { new: true }
-  ).catch((error) => {
-    throw createHttpException(400, error.message);
-  });
+  )
+    .select("-passwordHash -sessionKey -favorite -pets -notices")
+    .exec()
+    .catch((error) => {
+      throw createHttpException(400, error.message);
+    });
 
   if (result === null) {
     throw createHttpException(404, "Not found");

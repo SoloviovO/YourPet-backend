@@ -20,7 +20,9 @@ const googleAuth = async (req, res, next) => {
     sessionKey,
   });
 
-  res.redirect(`${FRONTEND_URL}?token=${accessJWT}&refreshToken=${refreshJWT}`);
+  res.redirect(
+    `${FRONTEND_URL}?accessToken=${accessJWT}&refreshToken=${refreshJWT}`
+  );
 };
 
 module.exports = {

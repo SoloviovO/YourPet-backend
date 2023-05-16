@@ -40,7 +40,7 @@ const refresh = async (req, res, next) => {
   });
 
   res.json({
-    token: accessJWT,
+    accessToken: accessJWT,
     refreshToken: refreshJWT,
   });
 };

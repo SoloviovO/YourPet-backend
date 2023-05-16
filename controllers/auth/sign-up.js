@@ -1,7 +1,7 @@
 const { UserModel } = require("../../database/models/user.model");
 const { createHash, createHttpException } = require("../../services");
 const { addUserSchema } = require("../../schemas");
-const gravatar = require("gravatar");
+const { REGISTER_IMAGE } = require("../../utils");
 
 const signUp = async (req, res, next) => {
   const { email, password } = req.body;
@@ -21,7 +21,7 @@ const signUp = async (req, res, next) => {
   }
 
   const passwordHash = await createHash(password);
-  const image = gravatar.url(email);
+  const image = REGISTER_IMAGE;
 
   const newUser = await UserModel.create({
     email,
