@@ -61,7 +61,7 @@ const userSchema = mongoose.Schema(
     refreshToken: {
       type: String,
     },
-    token: {
+    accessToken: {
       type: String,
     },
   },

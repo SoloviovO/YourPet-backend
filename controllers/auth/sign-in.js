@@ -47,7 +47,7 @@ const signIn = async (req, res, next) => {
   });
 
   res.json({
-    token: accessJWT,
+    accessToken: accessJWT,
     refreshToken: refreshJWT,
     user: {
       id: user._id,

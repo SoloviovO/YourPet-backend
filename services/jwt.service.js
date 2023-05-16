@@ -8,26 +8,26 @@ const {
 } = process.env;
 
 const createJWT = (payload) => {
-  const token = jwt.sign(payload, JWT_SECRET, {
+  const accessToken = jwt.sign(payload, JWT_SECRET, {
     expiresIn: `${JWT_EXPIRES_IN_SECONDS}s`,
   });
 
-  return token;
+  return accessToken;
 };
 const createRefresh = (payload) => {
-  const token = jwt.sign(payload, REFRESH_SECRET, {
+  const accessToken = jwt.sign(payload, REFRESH_SECRET, {
     expiresIn: `${REFRESH_EXPIRES_IN_SECONDS}s`,
   });
 
-  return token;
+  return accessToken;
 };
 
-const veryfyJWT = (token) => {
-  return jwt.verify(token, JWT_SECRET);
+const veryfyJWT = (accessToken) => {
+  return jwt.verify(accessToken, JWT_SECRET);
 };
 
-const veryfyRefresh = (token) => {
-  return jwt.verify(token, REFRESH_SECRET);
+const veryfyRefresh = (accessToken) => {
+  return jwt.verify(accessToken, REFRESH_SECRET);
 };
 
 module.exports = {
