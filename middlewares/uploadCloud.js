@@ -1,6 +1,7 @@
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
+const { UPLOAD_FILE_LIMIT_IN_BYTE, ALLOWED_FORMATS } = require("../utils");
 require("dotenv").config();
 
 const { CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
@@ -14,7 +15,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   folder: "avatars",
-  allowedFormats: ["jpg", "png", "svg"],
+  allowedFormats: ALLOWED_FORMATS,
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   },
@@ -22,9 +23,9 @@ const storage = new CloudinaryStorage({
 
 const uploadCloud = multer({
   storage,
-  limits: { fileSize: 3000000 },
+  limits: { fileSize: UPLOAD_FILE_LIMIT_IN_BYTE },
   fileFilter: (req, file, cb) => {
-    const allowedFormats = ["jpg", "png", "svg"];
+    const allowedFormats = ALLOWED_FORMATS;
     const fileExtension =
       file.originalname.split(".")[file.originalname.split(".").length - 1];
     if (!allowedFormats.includes(fileExtension)) {
