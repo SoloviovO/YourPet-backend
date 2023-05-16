@@ -11,13 +11,13 @@ const userAuthMiddleware = async (req, res, next) => {
       throw createHttpException(401, unauthorizedMessage);
     }
 
-    const [bearer, token] = authorizationHeader?.split(" ");
-    if (bearer !== "Bearer" || !token) {
+    const [bearer, accessToken] = authorizationHeader?.split(" ");
+    if (bearer !== "Bearer" || !accessToken) {
       throw createHttpException(401, unauthorizedMessage);
     }
 
     try {
-      const tokenPayload = veryfyJWT(token);
+      const tokenPayload = veryfyJWT(accessToken);
       if (!tokenPayload.userId || !tokenPayload.sessionKey) {
         throw createHttpException(401, unauthorizedMessage);
       }
