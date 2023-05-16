@@ -17,7 +17,10 @@ const deleteFavoriteNitice = async (req, res, next) => {
     _id,
     { $pull: { favorite: id } },
     { new: true }
-  ).populate("favorite");
+  )
+    .populate("favorite")
+    .select("-passwordHash -sessionKey -pets -notices")
+    .exec();
 
   if (!user) {
     return res.status(400).json({

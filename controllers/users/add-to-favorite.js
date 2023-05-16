@@ -21,9 +21,10 @@ const addNoticeToFavirite = async (req, res, next) => {
     });
   }
 
-  const userWithNotices = await UserModel.findById(user._id).populate(
-    "favorite"
-  );
+  const userWithNotices = await UserModel.findById(user._id)
+    .populate("favorite")
+    .select("-passwordHash -sessionKey -pets -notices")
+    .exec();
 
   res.json({ user: userWithNotices });
 };
