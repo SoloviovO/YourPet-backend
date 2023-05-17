@@ -38,6 +38,7 @@ const signUp = async (req, res, next) => {
       phone: newUser.phone,
       city: newUser.city,
       image: newUser.image,
+      isNewUser: true,
     },
   });
 };
