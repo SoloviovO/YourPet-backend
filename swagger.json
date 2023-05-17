@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.18",
+    "version": "1.0.19",
     "title": "Swagger YourPet",
     "description": "API documentation for GoIT. Team NodeMoon - project  YourPet. [Backend github repository](https://github.com/SoloviovO/YourPet-backend)"
   },
@@ -298,6 +298,15 @@
         "tags": ["User"],
         "summary": "Favorite",
         "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 16
+            }
+          },
           {
             "in": "query",
             "name": "page",
@@ -671,6 +680,31 @@
       "get": {
         "tags": ["Notices"],
         "summary": "Notices by authorized user",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 16
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "security": [
           {
             "Bearer": []
