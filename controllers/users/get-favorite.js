@@ -2,11 +2,18 @@ const { UserModel } = require("../../database/models");
 
 const getFavoriteNotices = async (req, res, next) => {
   const user = req.user;
-  const { page, limit } = req.query;
+  const { title, page, limit } = req.query;
 
   const result = await UserModel.findById(user._id).populate("favorite");
 
-  let favoriteNotices = result.favorite;
+  const regex = new RegExp(title, "i");
+
+  let favoriteNoticesAll = result.favorite.filter((notice) =>
+    regex.test(notice.title)
+  );
+  let favoriteNotices = result.favorite.filter((notice) =>
+    regex.test(notice.title)
+  );
 
   if (page && limit) {
     const startIndex = (page - 1) * limit;
@@ -25,7 +32,7 @@ const getFavoriteNotices = async (req, res, next) => {
     favorite: favoriteNotices,
   };
 
-  res.json({ user: match, total: result.favorite.length });
+  res.json({ user: match, total: favoriteNoticesAll.length });
 };
 
 module.exports = {
