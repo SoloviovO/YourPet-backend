@@ -4,8 +4,6 @@ const { getCategory } = require("./getCategory");
 const { addNotice } = require("./addNotice");
 const { getNoticesByOwnerId } = require("./getNoticesByOwnerId");
 const { deleteNotice } = require("./deleteNotice");
-const { getOwnNoticesByTitle } = require("./own-notices-findByTitle");
-const { getFavoriteNoticesByTitle } = require("./favorit-notices-findByTitle");
 
 module.exports = {
   getNoticesByTitle,
@@ -14,6 +12,4 @@ module.exports = {
   getOneNotice,
   getNoticesByOwnerId,
   deleteNotice,
-  getOwnNoticesByTitle,
-  getFavoriteNoticesByTitle,
 };
