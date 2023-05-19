@@ -1,5 +1,5 @@
 const REGISTER_IMAGE =
-  "https://drive.google.com/file/d/1JKalmY5-x8wbrspY075e3N08K2e5LWnU/view";
+  "https://i.pinimg.com/564x/27/6f/46/276f46d26122f515a4362993e0bfd141.jpg";
 
 const UPLOAD_FILE_LIMIT_IN_BYTE = 3145728;
 
