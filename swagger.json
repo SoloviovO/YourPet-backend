@@ -2,6 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "version": "1.1.19",
+
     "title": "Swagger YourPet",
     "description": "API documentation for GoIT. Team NodeMoon - project  YourPet. [Backend github repository](https://github.com/SoloviovO/YourPet-backend)"
   },
